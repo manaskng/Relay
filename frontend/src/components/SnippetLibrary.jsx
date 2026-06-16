@@ -1,3 +1,4 @@
+import RelayLogo from './RelayLogo';
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom"; // 
@@ -127,7 +128,7 @@ const EmptySnippetView = ({ onAdd }) => (
       className="flex-1 text-center xl:text-left space-y-6 max-w-lg"
     >
       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider">
-        <FiZap /> Developer Productivity
+        <RelayLogo /> Developer Productivity
       </div>
       
       <h2 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white leading-tight">
@@ -145,7 +146,7 @@ const EmptySnippetView = ({ onAdd }) => (
           <span className="font-medium">Instant 1-Click Copy</span>
         </li>
         <li className="flex items-center gap-3 text-slate-700 dark:text-gray-300">
-          <div className="p-2 rounded-lg bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400"><FiZap /></div>
+          <div className="p-2 rounded-lg bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400"><RelayLogo /></div>
           <span className="font-medium">Track Time & Space Complexity</span>
         </li>
         <li className="flex items-center gap-3 text-slate-700 dark:text-gray-300">

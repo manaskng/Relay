@@ -1,3 +1,4 @@
+import RelayLogo from './RelayLogo';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -37,7 +38,7 @@ function Login({ setUser }) {
         {/* Header */}
         <div className="text-center mb-8">
            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 mb-4 shadow-lg">
-              <FiZap className="text-white text-xl" />
+              <RelayLogo className="text-white text-xl" />
            </div>
            <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
            <p className="text-gray-400">Log in to Relay OS</p>

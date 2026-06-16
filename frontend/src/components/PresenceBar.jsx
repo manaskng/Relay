@@ -1,3 +1,4 @@
+import RelayLogo from './RelayLogo';
 import React from 'react';
 import { FiUsers, FiZap, FiWifi } from 'react-icons/fi';
 
@@ -13,7 +14,7 @@ const PresenceBar = ({ roomId, isConnected, userName }) => {
       {/* Left: Room Info */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-lg text-indigo-600 dark:text-indigo-400">
-           <FiZap size={14} />
+           <RelayLogo size={14} />
            <span className="text-xs font-bold tracking-wider">ROOM: {roomId}</span>
         </div>
         

@@ -1,3 +1,4 @@
+import RelayLogo from './RelayLogo';
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate
 import axios from 'axios';
@@ -5,6 +6,7 @@ import { FiSearch, FiFileText, FiCode, FiX, FiLoader, FiZap, FiLogOut, FiSun, Fi
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import ContestWidget from './ContestWidget';
+import TimerWidget from './TimerWidget';
 
 function Navbar({ user, setUser }) {
   const { theme, toggleTheme } = useTheme();
@@ -79,7 +81,7 @@ function Navbar({ user, setUser }) {
           {/* 1. BRAND LOGO */}
           <Link to="/" className="flex items-center gap-2 group shrink-0">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-              <FiZap size={18} />
+              <RelayLogo size={18} />
             </div>
             <span className="text-xl font-bold text-slate-800 dark:text-white tracking-tight hidden sm:block">
               Relay
@@ -175,6 +177,8 @@ function Navbar({ user, setUser }) {
               {/* 3. RIGHT SIDE */}
               <div className="flex items-center gap-2 sm:gap-4 shrink-0 relative">
                 
+                <TimerWidget />
+
                 <button 
                   onClick={() => setIsContestOpen(!isContestOpen)}
                   className={`p-2 rounded-lg transition-all ${isContestOpen ? 'bg-blue-50 text-blue-600 dark:bg-dev-accent/20 dark:text-dev-accent' : 'text-slate-500 hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-white/5'}`}

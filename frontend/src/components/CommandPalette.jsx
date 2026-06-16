@@ -1,3 +1,4 @@
+import RelayLogo from './RelayLogo';
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -17,7 +18,7 @@ const ACTIONS = [
   // Navigation
   { id: "nav-home", label: "Go to Home", icon: FiHome, category: "Navigate", keywords: "home dashboard overview" },
   { id: "nav-docs", label: "Go to DevDocs", icon: FiFileText, category: "Navigate", keywords: "documents notes devdocs" },
-  { id: "nav-devspace", label: "Go to DevSpace", icon: FiZap, category: "Navigate", keywords: "devspace code editor live collaborate" },
+  { id: "nav-devspace", label: "Go to DevSpace", icon: RelayLogo, category: "Navigate", keywords: "devspace code editor live collaborate" },
   { id: "nav-snippets", label: "Go to Code Vault", icon: FiCode, category: "Navigate", keywords: "snippets code library vault algorithms" },
   { id: "nav-tasks", label: "Go to Task Board", icon: FiLayers, category: "Navigate", keywords: "tasks todo board objectives" },
   { id: "nav-contests", label: "Go to Contest Calendar", icon: FiCalendar, category: "Navigate", keywords: "contests calendar codeforces leetcode codechef" },

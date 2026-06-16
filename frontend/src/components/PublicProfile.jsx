@@ -1,3 +1,4 @@
+import RelayLogo from './RelayLogo';
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -242,7 +243,7 @@ function PublicProfile() {
             {/* SKILLS */}
             {profile.skills && profile.skills.length > 0 && (
               <section className="text-center">
-                  <h2 className="text-3xl font-bold mb-10 flex items-center justify-center gap-2 text-slate-900 dark:text-white"><FiZap className="text-blue-600 dark:text-purple-400"/> Tech Stack</h2>
+                  <h2 className="text-3xl font-bold mb-10 flex items-center justify-center gap-2 text-slate-900 dark:text-white"><RelayLogo className="text-blue-600 dark:text-purple-400"/> Tech Stack</h2>
                   <div className="flex flex-wrap justify-center gap-6">
                      {profile.skills.map((skill, idx) => {
                         const iconUrl = getSkillIcon(skill);

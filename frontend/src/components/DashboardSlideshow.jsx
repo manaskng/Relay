@@ -30,15 +30,27 @@ function DashboardSlideshow() {
   return (
     <div className="relative w-full h-full overflow-hidden">
       {SLIDES.map((slide, i) => (
-        <img
-          key={i}
-          src={slide.src}
-          alt={slide.alt}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-            i === current ? "opacity-100" : "opacity-0"
+        <div 
+          key={i} 
+          className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${
+            i === current ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
-          loading="lazy"
-        />
+        >
+          {/* Blurred Background */}
+          <img
+            src={slide.src}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-40"
+            aria-hidden="true"
+          />
+          {/* Main Image */}
+          <img
+            src={slide.src}
+            alt={slide.alt}
+            className="absolute inset-0 w-full h-full object-contain p-2 md:p-6 drop-shadow-2xl"
+            loading="lazy"
+          />
+        </div>
       ))}
 
       {/* Slide indicators */}

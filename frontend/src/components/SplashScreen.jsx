@@ -1,3 +1,4 @@
+import RelayLogo from './RelayLogo';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FiZap } from 'react-icons/fi';
@@ -21,7 +22,7 @@ function SplashScreen() {
         >
           <div className="absolute inset-0 bg-gradient-to-tr from-purple-600 to-blue-600 rounded-2xl animate-spin-slow blur-md opacity-70"></div>
           <div className="relative bg-[#0f172a] w-full h-full rounded-2xl border border-white/10 flex items-center justify-center shadow-2xl">
-            <FiZap className="w-10 h-10 text-white" />
+            <RelayLogo className="w-10 h-10 text-white" />
           </div>
         </motion.div>
 

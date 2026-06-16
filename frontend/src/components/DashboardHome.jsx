@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import RelayLogo from './RelayLogo';
 import { motion } from "framer-motion";
 import {
   FiHome, FiFileText, FiCode, FiLayers, FiPlus,
@@ -185,10 +187,19 @@ function DashboardHome({ setActiveTab }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <div className="flex flex-col items-center gap-3">
-          <FiZap className="text-blue-500 animate-pulse" size={28} />
-          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Loading workspace...</p>
+      <div className="min-h-[80vh] flex items-center justify-center relative overflow-hidden">
+        {/* Glow backdrop */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-500/10 dark:bg-indigo-500/10 rounded-full blur-[80px] pointer-events-none"></div>
+        <div className="flex flex-col items-center gap-6 relative z-10">
+          <div className="relative w-16 h-16 flex items-center justify-center">
+            <div className="absolute inset-0 border-4 border-slate-100 dark:border-slate-800 rounded-2xl"></div>
+            <div className="absolute inset-0 border-4 border-blue-500 dark:border-indigo-500 rounded-2xl border-t-transparent dark:border-t-transparent animate-spin"></div>
+            <RelayLogo className="text-blue-600 dark:text-indigo-400 animate-pulse" size={28} />
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-lg font-black text-slate-800 dark:text-white tracking-tight">Initializing Workspace</p>
+            <p className="text-xs text-slate-500 font-medium tracking-widest uppercase">Fetching data modules...</p>
+          </div>
         </div>
       </div>
     );
@@ -372,7 +383,7 @@ function DashboardHome({ setActiveTab }) {
       {/* Quick Actions */}
       <div>
         <h2 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-          <FiZap size={12} /> Quick Actions
+          <RelayLogo size={12} /> Quick Actions
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <QuickAction
@@ -384,7 +395,7 @@ function DashboardHome({ setActiveTab }) {
             delay={0.1}
           />
           <QuickAction
-            icon={FiZap}
+            icon={RelayLogo}
             label="RelaySandBox"
             description="Launch collaborative coding"
             onClick={() => setActiveTab("devspace")}

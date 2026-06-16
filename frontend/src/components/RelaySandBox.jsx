@@ -1,3 +1,4 @@
+import RelayLogo from './RelayLogo';
 import React, { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { io } from "socket.io-client";
@@ -359,7 +360,7 @@ function RelaySandBox() {
            {/* Logo Section */}
            <div className="flex flex-col items-center mb-6 md:mb-10">
              <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-indigo-500 via-purple-500 to-fuchsia-500 rounded-2xl shadow-lg shadow-purple-500/20 flex items-center justify-center mb-3 md:mb-5 rotate-3 hover:rotate-0 transition-transform duration-500">
-               <FiZap className="text-white drop-shadow-md" size={28} />
+               <RelayLogo className="text-white drop-shadow-md" size={28} />
              </div>
              <h1 className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 tracking-tight mb-1 md:mb-2">RelaySandBox</h1>
              <p className="text-slate-500 dark:text-slate-400 font-medium text-xs md:text-sm">Collaborative Workspace</p>
@@ -483,7 +484,7 @@ function RelaySandBox() {
                 <div className="flex-1 flex flex-col p-4 overflow-hidden">
                    <div className="grid grid-cols-2 gap-3 mb-4 shrink-0">
                       <button onClick={() => handleAiAction("explain")} disabled={isAiLoading} className="py-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300 border border-blue-200 dark:border-blue-500/30 rounded-xl text-xs font-bold hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2"><FiLayout /> Explain Code</button>
-                      <button onClick={() => handleAiAction("refactor")} disabled={isAiLoading} className="py-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30 rounded-xl text-xs font-bold hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2"><FiZap /> Refactor</button>
+                      <button onClick={() => handleAiAction("refactor")} disabled={isAiLoading} className="py-3 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30 rounded-xl text-xs font-bold hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2"><RelayLogo /> Refactor</button>
                    </div>
                    
                    <div className="flex-1 bg-[#020617] rounded-xl p-4 overflow-y-auto custom-scrollbar font-mono text-[11px] text-slate-300 relative shadow-inner border border-white/5" ref={terminalRef}>
@@ -504,7 +505,7 @@ function RelaySandBox() {
 
                       {aiResponse && (
                          <div className="mt-6 pt-6 border-t border-white/10 animate-fade-in pb-8">
-                            <div className="text-indigo-400 font-bold mb-4 uppercase tracking-wider text-xs flex items-center gap-2 border-b border-indigo-500/30 pb-2"><FiZap size={14} /> Analysis Result</div>
+                            <div className="text-indigo-400 font-bold mb-4 uppercase tracking-wider text-xs flex items-center gap-2 border-b border-indigo-500/30 pb-2"><RelayLogo size={14} /> Analysis Result</div>
                             <div className="prose prose-invert max-w-none"><ReactMarkdown components={{p: ({node, ...props}) => <p className="text-sm leading-7 text-slate-300 mb-4 font-light" {...props} />, h1: ({node, ...props}) => <h1 className="text-lg font-bold text-white mb-3 mt-5 border-b border-white/10 pb-1" {...props} />, h2: ({node, ...props}) => <h2 className="text-base font-bold text-blue-200 mb-2 mt-4" {...props} />, strong: ({node, ...props}) => <span className="font-bold text-emerald-400" {...props} />, ul: ({node, ...props}) => <ul className="list-disc pl-5 space-y-2 text-slate-300 mb-4" {...props} />, li: ({node, ...props}) => <li className="text-sm pl-1 marker:text-slate-500" {...props} />, code: ({node, inline, className, children, ...props}) => !inline ? (<div className="bg-[#0b1120] p-4 rounded-xl border border-white/10 my-4 overflow-x-auto shadow-lg"><code className="text-xs font-mono text-blue-300 leading-relaxed" {...props}>{children}</code></div>) : (<code className="bg-indigo-500/20 px-1.5 py-0.5 rounded text-xs font-mono text-indigo-300 border border-indigo-500/30" {...props}>{children}</code>)}}>{aiResponse}</ReactMarkdown></div>
                          </div>
                       )}

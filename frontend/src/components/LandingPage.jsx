@@ -1,3 +1,4 @@
+import RelayLogo from './RelayLogo';
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
@@ -165,7 +166,7 @@ function MockAIPanel() {
   return (
     <div className="bg-[#0a0a1a] rounded-xl border border-white/10 p-3 space-y-2">
       <div className="flex items-center gap-2 mb-2">
-        <FiZap className="text-fuchsia-400 text-sm" />
+        <RelayLogo className="text-fuchsia-400 text-sm" />
         <span className="text-xs text-fuchsia-400 font-semibold">Gemini Analysis</span>
       </div>
       <div className="bg-white/5 rounded-lg p-2 text-[10px] text-slate-300 leading-relaxed">
@@ -331,7 +332,7 @@ const FEATURES = [
     mockup: MockSnippetCards,
   },
   {
-    icon: FiZap,
+    icon: RelayLogo,
     title: "AI Code Assistant",
     subtitle: "Explain complex code, refactor suggestions, model cascade for 99% uptime",
     pills: ["Gemini 2.5 Flash", "Code Explain", "Auto Refactor"],
@@ -378,8 +379,8 @@ const TECH_STACK = [
   { name: "Node.js", role: "Runtime Engine", icon: FiServer },
   { name: "MongoDB", role: "NoSQL Database", icon: FiDatabase },
   { name: "Socket.IO", role: "Real-time Engine", icon: FiWifi },
-  { name: "Redis", role: "Session & Cache", icon: FiZap },
-  { name: "Gemini AI", role: "Code Intelligence", icon: FiZap },
+  { name: "Redis", role: "Session & Cache", icon: RelayLogo },
+  { name: "Gemini AI", role: "Code Intelligence", icon: RelayLogo },
   { name: "Docker", role: "Containerization", icon: FiBox },
   { name: "Vite", role: "Build Tool", icon: FiTerminal },
   { name: "TailwindCSS", role: "Utility Styles", icon: FiGrid },
@@ -422,7 +423,7 @@ function LandingPage() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-shadow">
-              <FiZap className="text-white text-lg" />
+              <RelayLogo className="text-white text-lg" />
             </div>
             <span className="text-xl font-bold tracking-tight">Relay</span>
           </Link>
@@ -723,7 +724,7 @@ function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-              <FiZap className="text-white text-xs" />
+              <RelayLogo className="text-white text-xs" />
             </div>
             <span className="text-sm font-semibold">Relay</span>
           </div>

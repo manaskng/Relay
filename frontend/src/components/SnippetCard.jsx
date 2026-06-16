@@ -1,3 +1,4 @@
+import RelayLogo from './RelayLogo';
 import React, { useState } from "react";
 import { FiCopy, FiCheck, FiEdit2, FiTrash2, FiExternalLink, FiActivity, FiZap, FiMaximize2, FiMinimize2 } from "react-icons/fi";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -91,7 +92,7 @@ function SnippetCard({ snippet, onEdit, onDelete, isExpanded, onToggleExpand }) 
                  {(snippet.timeComplexity || snippet.spaceComplexity) ? (
                    <>
                      {snippet.timeComplexity && <span className="flex items-center gap-1"><FiActivity className="text-purple-500"/> {snippet.timeComplexity}</span>}
-                     {snippet.spaceComplexity && <span className="flex items-center gap-1"><FiZap className="text-emerald-500"/> {snippet.spaceComplexity}</span>}
+                     {snippet.spaceComplexity && <span className="flex items-center gap-1"><RelayLogo className="text-emerald-500"/> {snippet.spaceComplexity}</span>}
                    </>
                  ) : <span className="italic opacity-50">No complexity data</span>}
               </div>

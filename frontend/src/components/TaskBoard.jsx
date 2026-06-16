@@ -1,3 +1,4 @@
+import RelayLogo from './RelayLogo';
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { FiPlus, FiTrash2, FiCheck, FiLayers, FiZap } from "react-icons/fi";
@@ -147,7 +148,7 @@ function TaskBoard() {
       <div className="flex-1 overflow-y-auto custom-scrollbar pb-20 relative z-10">
         {loading ? (
              <div className="text-center py-20 animate-pulse text-slate-400 font-medium flex flex-col items-center gap-2">
-                 <FiZap className="text-indigo-500" size={24}/> Syncing objectives...
+                 <RelayLogo className="text-indigo-500" size={24}/> Syncing objectives...
              </div>
         ) : tasks.length === 0 ? (
            <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} className="text-center py-20 px-10 bg-slate-50 dark:bg-dev-card rounded-3xl border border-dashed border-slate-200 dark:border-dev-border relative overflow-hidden">

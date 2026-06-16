@@ -1,7 +1,9 @@
+import RelayLogo from './RelayLogo';
 import React, { useState, useEffect, useCallback } from "react";
 import {
   FiHome, FiFileText, FiCode, FiUser, FiGrid, FiLayers,
-  FiZap, FiCalendar, FiEdit3, FiCommand, FiBarChart2, FiClock
+  FiZap, FiCalendar, FiEdit3, FiCommand, FiBarChart2, FiClock,
+  FiChevronLeft, FiChevronRight
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
@@ -19,12 +21,11 @@ import Analytics from "./Analytics";
 
 import CommandPalette from "./CommandPalette";
 import ScratchPad from "./ScratchPad";
-import FocusTimer from "./FocusTimer";
 
 // ──────────────────────────────────────────────────────
 // Sidebar Nav Item
 // ──────────────────────────────────────────────────────
-const NavItem = ({ id, icon: Icon, label, activeTab, setActiveTab, badge }) => {
+const NavItem = ({ id, icon: Icon, label, activeTab, setActiveTab, badge, isCollapsed }) => {
   const isActive = activeTab === id;
   return (
     <button
@@ -47,12 +48,12 @@ const NavItem = ({ id, icon: Icon, label, activeTab, setActiveTab, badge }) => {
         <Icon size={20} />
       </div>
 
-      <span className="font-medium text-sm whitespace-nowrap overflow-hidden hidden lg:block flex-1 text-left">
+      <span className={`font-medium text-sm whitespace-nowrap overflow-hidden hidden lg:block flex-1 text-left ${isCollapsed ? '!hidden' : ''}`}>
         {label}
       </span>
 
       {badge && (
-        <span className={`hidden lg:inline text-[9px] font-bold px-1.5 py-0.5 rounded-full ${
+        <span className={`hidden lg:inline text-[9px] font-bold px-1.5 py-0.5 rounded-full ${isCollapsed ? '!hidden' : ''} ${
           isActive ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-white/10 text-slate-400"
         }`}>
           {badge}
@@ -63,6 +64,12 @@ const NavItem = ({ id, icon: Icon, label, activeTab, setActiveTab, badge }) => {
       <div className="absolute left-16 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 lg:hidden pointer-events-none transition-opacity z-50 whitespace-nowrap shadow-md">
         {label}
       </div>
+      {/* Tooltip for LG collapsed sidebar */}
+      {isCollapsed && (
+        <div className="absolute left-16 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap shadow-md hidden lg:block">
+          {label}
+        </div>
+      )}
     </button>
   );
 };
@@ -74,7 +81,7 @@ function Dashboard() {
   const [activeTab, setActiveTab] = useState("home");
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isScratchPadOpen, setIsScratchPadOpen] = useState(false);
-  const [isFocusTimerOpen, setIsFocusTimerOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const { toggleTheme } = useTheme();
 
   // ── Global Keyboard Shortcuts ──
@@ -124,41 +131,35 @@ function Dashboard() {
       {/* ════════════════════════════════════════════════ */}
       {/* DESKTOP SIDEBAR                                 */}
       {/* ════════════════════════════════════════════════ */}
-      <aside className="hidden md:flex flex-col w-[72px] lg:w-64 h-full border-r border-slate-200 dark:border-white/10 bg-white dark:bg-[#0b1121] transition-all duration-300 ease-in-out z-20 shrink-0">
+      <aside className={`hidden md:flex flex-col ${isSidebarCollapsed ? 'w-[72px]' : 'w-[72px] lg:w-64'} h-full border-r border-slate-200 dark:border-white/10 bg-white dark:bg-[#0b1121] transition-all duration-300 ease-in-out z-20 shrink-0`}>
 
         {/* Brand */}
-        <div className="h-16 flex items-center justify-center lg:justify-start lg:px-6 border-b border-slate-100 dark:border-white/5">
-          <FiZap className="text-blue-600 lg:mr-3" size={24} />
-          <span className="font-bold text-slate-800 dark:text-white hidden lg:block">Workspace</span>
+        <div className={`h-16 flex items-center justify-center ${!isSidebarCollapsed ? 'lg:justify-start lg:px-6' : ''} border-b border-slate-100 dark:border-white/5`}>
+          <RelayLogo className={`text-blue-600 ${!isSidebarCollapsed ? 'lg:mr-3' : ''}`} size={24} />
+          <span className={`font-bold text-slate-800 dark:text-white hidden ${!isSidebarCollapsed ? 'lg:block' : ''}`}>Workspace</span>
         </div>
 
         {/* Nav Items */}
         <div className="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto custom-scrollbar">
-          <NavItem id="home"     icon={FiHome}     label="Home"           activeTab={activeTab} setActiveTab={setActiveTab} />
+          <NavItem id="home"     icon={FiHome}     label="Home"           activeTab={activeTab} setActiveTab={setActiveTab} isCollapsed={isSidebarCollapsed} />
 
           <div className="my-3 border-t border-slate-100 dark:border-white/5 mx-2" />
 
-          <NavItem id="docs"     icon={FiFileText} label="DevDocs"        activeTab={activeTab} setActiveTab={setActiveTab} />
-          <NavItem id="devspace" icon={FiZap}      label="RelaySandBox"       activeTab={activeTab} setActiveTab={setActiveTab} badge="Live" />
-          <NavItem id="snippets" icon={FiCode}     label="Code Vault"     activeTab={activeTab} setActiveTab={setActiveTab} />
-          <NavItem id="tasks"    icon={FiLayers}   label="Task Board"     activeTab={activeTab} setActiveTab={setActiveTab} />
+          <NavItem id="docs"     icon={FiFileText} label="DevDocs"        activeTab={activeTab} setActiveTab={setActiveTab} isCollapsed={isSidebarCollapsed} />
+          <NavItem id="devspace" icon={RelayLogo}      label="RelaySandBox"       activeTab={activeTab} setActiveTab={setActiveTab} badge="Live" isCollapsed={isSidebarCollapsed} />
+          <NavItem id="snippets" icon={FiCode}     label="Code Vault"     activeTab={activeTab} setActiveTab={setActiveTab} isCollapsed={isSidebarCollapsed} />
+          <NavItem id="tasks"    icon={FiLayers}   label="Task Board"     activeTab={activeTab} setActiveTab={setActiveTab} isCollapsed={isSidebarCollapsed} />
 
           <div className="my-3 border-t border-slate-100 dark:border-white/5 mx-2" />
 
-          <NavItem id="analytics" icon={FiBarChart2} label="Analytics"     activeTab={activeTab} setActiveTab={setActiveTab} badge="New" />
-          <NavItem id="profiles" icon={FiUser}     label="Profile"        activeTab={activeTab} setActiveTab={setActiveTab} />
+          <NavItem id="analytics" icon={FiBarChart2} label="Analytics"     activeTab={activeTab} setActiveTab={setActiveTab} badge="New" isCollapsed={isSidebarCollapsed} />
+          <NavItem id="profiles" icon={FiUser}     label="Profile"        activeTab={activeTab} setActiveTab={setActiveTab} isCollapsed={isSidebarCollapsed} />
         </div>
 
-        {/* Sidebar Footer — Focus Timer + Scratch Pad shortcut */}
+        {/* Sidebar Footer — Shortcuts */}
         <div className="border-t border-slate-100 dark:border-white/5">
           {/* Keyboard Shortcut Hints */}
-          <div className="p-3 hidden lg:flex flex-col gap-1.5">
-            <button
-              onClick={() => setIsFocusTimerOpen(true)}
-              className="flex items-center justify-between px-2 py-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-600 dark:hover:text-slate-300 transition-colors text-xs"
-            >
-              <span className="flex items-center gap-2"><FiClock size={12} /> Focus Timer</span>
-            </button>
+          <div className={`p-3 hidden ${!isSidebarCollapsed ? 'lg:flex' : ''} flex-col gap-1.5`}>
             <button
               onClick={() => setIsCommandPaletteOpen(true)}
               className="flex items-center justify-between px-2 py-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-600 dark:hover:text-slate-300 transition-colors text-xs"
@@ -175,8 +176,15 @@ function Dashboard() {
             </button>
           </div>
 
-          <div className="p-3 text-center lg:text-left text-[10px] text-slate-400 dark:text-gray-600 border-t border-slate-100 dark:border-white/5">
-            <span className="hidden lg:inline">Relay v3.0</span>
+          <div className="p-3 flex items-center justify-between border-t border-slate-100 dark:border-white/5">
+            <span className={`text-[10px] text-slate-400 dark:text-gray-600 hidden ${!isSidebarCollapsed ? 'lg:inline' : ''}`}>Relay v3.0</span>
+            <button 
+              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} 
+              className={`p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 rounded transition-colors ${isSidebarCollapsed ? 'mx-auto' : ''}`}
+              title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+            >
+              {isSidebarCollapsed ? <FiChevronRight size={16} /> : <FiChevronLeft size={16} />}
+            </button>
           </div>
         </div>
       </aside>
@@ -225,7 +233,7 @@ function Dashboard() {
         {[
           { id: "home",     icon: FiHome,     label: "Home" },
           { id: "docs",     icon: FiFileText, label: "Docs" },
-          { id: "devspace", icon: FiZap,      label: "Space" },
+          { id: "devspace", icon: RelayLogo,      label: "Space" },
           { id: "snippets", icon: FiCode,     label: "Code" },
           { id: "tasks",    icon: FiLayers,   label: "Tasks" },
           { id: "analytics", icon: FiBarChart2, label: "Stats" },
@@ -259,35 +267,7 @@ function Dashboard() {
         onClose={() => setIsScratchPadOpen(false)}
       />
 
-      {/* Focus Timer Overlay */}
-      <AnimatePresence>
-        {isFocusTimerOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm"
-            onClick={() => setIsFocusTimerOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-[320px] relative"
-            >
-              <button
-                onClick={() => setIsFocusTimerOpen(false)}
-                className="absolute -top-2 -right-2 z-10 w-7 h-7 bg-slate-800 border border-white/10 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-colors text-xs"
-              >
-                ✕
-              </button>
-              <FocusTimer />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
 
     </div>
   );
