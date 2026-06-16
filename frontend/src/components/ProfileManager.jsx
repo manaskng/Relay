@@ -3,7 +3,7 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   FiEdit3, FiSave, FiPlus, FiTrash2, FiMapPin, FiMail, 
-  FiGithub, FiLinkedin, FiExternalLink, FiCpu, FiAward, 
+  FiGithub, FiLinkedin, FiExternalLink, FiZap, FiAward, 
   FiCode, FiShare2, FiCheck, FiDownload, FiMessageSquare, 
   FiX, FiArrowRight, FiCamera, FiImage, FiStar, FiUploadCloud, FiLoader 
 } from "react-icons/fi";
@@ -503,7 +503,7 @@ function ProfileManager() {
                 {/* SKILLS */}
                 {profile.skills.length > 0 && (
                   <section id="skills" className="text-center">
-                      <h2 className="text-3xl font-bold mb-10 flex items-center justify-center gap-2 text-slate-900 dark:text-white"><FiCpu className="text-blue-600 dark:text-purple-400"/> Tech Stack</h2>
+                      <h2 className="text-3xl font-bold mb-10 flex items-center justify-center gap-2 text-slate-900 dark:text-white"><FiZap className="text-blue-600 dark:text-purple-400"/> Tech Stack</h2>
                       <div className="flex flex-wrap justify-center gap-6">
                         {profile.skills.map((skill, idx) => {
                            const iconUrl = getSkillIcon(skill);
@@ -685,7 +685,7 @@ function ProfileManager() {
       </div>
       {/* ... Report Issue button ... */}
       <a 
-        href="mailto:support@devnexus.com?subject=Issue Report - DevNexus&body=Describe your issue here..."
+        href="mailto:support@devnexus.com?subject=Issue Report - Relay&body=Describe your issue here..."
         className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-red-500/90 text-white rounded-full shadow-2xl hover:scale-105 transition-transform hover:bg-red-600 backdrop-blur-md"
         title="Report an Issue"
       >

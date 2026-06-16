@@ -4,9 +4,9 @@ import { io } from "socket.io-client";
 import ReactMarkdown from 'react-markdown';
 import axios from "axios";
 import { 
-  FiCpu, FiWifi, FiPlay, FiChevronDown, FiActivity, FiTerminal, 
+  FiZap, FiWifi, FiPlay, FiChevronDown, FiActivity, FiTerminal, 
   FiLoader, FiLogOut, FiCopy, FiCheck, FiArrowRight, FiPlus, 
-  FiHash, FiSave, FiX, FiTag, FiFileText, FiZap, FiLayout, FiUser
+  FiHash, FiSave, FiX, FiTag, FiFileText, FiLayout, FiUser
 } from "react-icons/fi";
 
 // --- CUSTOM COMPONENTS ---
@@ -30,7 +30,7 @@ const LANGUAGES = [
   { id: "rust", label: "Rust" },
 ];
 
-function DevSpace() {
+function RelaySandBox() {
   // =========================================
   // 1. STATE MANAGEMENT
   // =========================================
@@ -58,7 +58,7 @@ function DevSpace() {
   const [isAiLoading, setIsAiLoading] = useState(false);
   
   // Content State
-  const [code, setCode] = useState("// Welcome to DevSpace!\n// Select a language and start coding...");
+  const [code, setCode] = useState("// Welcome to RelaySandBox!\n// Select a language and start coding...");
   const [language, setLanguage] = useState("javascript");
   
   // Logs & Output
@@ -251,7 +251,7 @@ function DevSpace() {
   const handleOpenSaveModal = () => {
     if (!code || code.length < 10) return alert("Code is too short to save.");
     setSaveForm({
-      title: `DevSpace Session ${new Date().toLocaleTimeString()}`,
+      title: `RelaySandBox Session ${new Date().toLocaleTimeString()}`,
       description: `Collaborative session in Room ${roomId} with ${activeUsers.length} active users.`,
       tags: `devspace, ${language}, collab`
     });
@@ -277,38 +277,101 @@ function DevSpace() {
   };
 
   // =========================================
-  // 5. RENDER LOBBY (Compact UI for Mobile)
+  // 5. RENDER LOBBY (Theme-aware with workspace preview)
   // =========================================
   if (viewState === "lobby") {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen h-full bg-[#020617] relative overflow-y-auto overflow-x-hidden font-sans p-4">
+      <div className="flex items-center justify-center min-h-screen h-full bg-slate-50 dark:bg-[#020617] relative overflow-y-auto overflow-x-hidden font-sans p-4 transition-colors duration-300">
         
+        {/* Blurred Workspace Preview Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30 dark:opacity-20">
+          {/* Fake sidebar */}
+          <div className="absolute left-0 top-0 w-16 lg:w-56 h-full bg-white dark:bg-[#0b1121] border-r border-slate-200 dark:border-white/10">
+            <div className="p-4 space-y-3 mt-16">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className={`h-3 rounded-lg ${i === 2 ? 'bg-blue-200 dark:bg-blue-500/30 w-3/4' : 'bg-slate-200 dark:bg-white/10'} ${i > 3 ? 'w-1/2' : 'w-full'}`} />
+              ))}
+            </div>
+          </div>
+          {/* Fake editor area */}
+          <div className="absolute left-16 lg:left-56 top-0 right-0 h-full">
+            {/* Top toolbar */}
+            <div className="h-14 border-b border-slate-200 dark:border-white/10 bg-white dark:bg-[#0b1121] flex items-center px-6 gap-3">
+              <div className="w-24 h-3 rounded bg-slate-200 dark:bg-white/10" />
+              <div className="w-16 h-3 rounded bg-slate-200 dark:bg-white/10" />
+            </div>
+            {/* Code lines mockup */}
+            <div className="p-6 space-y-2.5">
+              {[
+                { w: 'w-32', indent: 0, color: 'bg-indigo-200 dark:bg-indigo-500/20' },
+                { w: 'w-56', indent: 0, color: 'bg-slate-200 dark:bg-white/10' },
+                { w: 'w-44', indent: 1, color: 'bg-emerald-200 dark:bg-emerald-500/20' },
+                { w: 'w-64', indent: 1, color: 'bg-slate-200 dark:bg-white/10' },
+                { w: 'w-48', indent: 2, color: 'bg-purple-200 dark:bg-purple-500/20' },
+                { w: 'w-36', indent: 2, color: 'bg-slate-200 dark:bg-white/10' },
+                { w: 'w-20', indent: 1, color: 'bg-slate-200 dark:bg-white/10' },
+                { w: 'w-52', indent: 0, color: 'bg-amber-200 dark:bg-amber-500/20' },
+                { w: 'w-40', indent: 1, color: 'bg-slate-200 dark:bg-white/10' },
+                { w: 'w-28', indent: 0, color: 'bg-slate-200 dark:bg-white/10' },
+                { w: 'w-60', indent: 0, color: 'bg-indigo-200 dark:bg-indigo-500/20' },
+                { w: 'w-36', indent: 1, color: 'bg-slate-200 dark:bg-white/10' },
+              ].map((line, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <span className="w-6 text-right text-[10px] text-slate-300 dark:text-slate-700 font-mono shrink-0">{i + 1}</span>
+                  <div style={{ marginLeft: `${line.indent * 20}px` }} className={`h-2.5 rounded ${line.w} ${line.color}`} />
+                </div>
+              ))}
+            </div>
+            {/* Fake terminal at bottom */}
+            <div className="absolute bottom-0 left-0 right-0 h-32 border-t border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-[#0a0f1e] p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-2 h-2 rounded-full bg-emerald-400" />
+                <div className="w-16 h-2 rounded bg-slate-200 dark:bg-white/10" />
+              </div>
+              <div className="space-y-1.5">
+                <div className="w-48 h-2 rounded bg-slate-200 dark:bg-white/10" />
+                <div className="w-32 h-2 rounded bg-emerald-200 dark:bg-emerald-500/20" />
+              </div>
+            </div>
+            {/* Fake presence indicators */}
+            <div className="absolute top-20 right-6 flex -space-x-2">
+              {['bg-blue-500', 'bg-emerald-500', 'bg-purple-500'].map((c, i) => (
+                <div key={i} className={`w-7 h-7 rounded-full ${c} border-2 border-white dark:border-[#020617] flex items-center justify-center text-white text-[8px] font-bold`}>
+                  {['M', 'A', 'S'][i]}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Blur overlay on the preview */}
+        <div className="absolute inset-0 backdrop-blur-[6px] bg-white/40 dark:bg-[#020617]/60 pointer-events-none" />
+
         {/* Background Ambient Glow */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
            <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[120px] animate-pulse-slow"></div>
            <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-fuchsia-600/10 rounded-full blur-[100px]"></div>
-           <div className="absolute top-[40%] left-[50%] transform -translate-x-1/2 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[80px]"></div>
         </div>
 
-        {/* Card Container - Adjusted margins and padding for mobile */}
-        <div className="relative z-10 w-full max-w-[440px] bg-[#0f172a]/60 border border-white/10 rounded-3xl shadow-2xl p-6 md:p-8 backdrop-blur-2xl animate-fade-in-up my-auto">
+        {/* Card Container */}
+        <div className="relative z-10 w-full max-w-[440px] bg-white/80 dark:bg-[#0f172a]/80 border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl p-6 md:p-8 backdrop-blur-2xl animate-fade-in-up my-auto">
            
-           {/* Logo Section - Compact vertical spacing */}
+           {/* Logo Section */}
            <div className="flex flex-col items-center mb-6 md:mb-10">
              <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-indigo-500 via-purple-500 to-fuchsia-500 rounded-2xl shadow-lg shadow-purple-500/20 flex items-center justify-center mb-3 md:mb-5 rotate-3 hover:rotate-0 transition-transform duration-500">
-               <FiCpu className="text-white drop-shadow-md" size={28} />
+               <FiZap className="text-white drop-shadow-md" size={28} />
              </div>
-             <h1 className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 tracking-tight mb-1 md:mb-2">DevSpace</h1>
-             <p className="text-slate-400 font-medium text-xs md:text-sm">Collaborative Workspace</p>
+             <h1 className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 tracking-tight mb-1 md:mb-2">RelaySandBox</h1>
+             <p className="text-slate-500 dark:text-slate-400 font-medium text-xs md:text-sm">Collaborative Workspace</p>
            </div>
 
-           {/* Input: Identity - Reduced margin */}
+           {/* Input: Identity */}
            <div className="mb-4 md:mb-6 group">
-             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-2 ml-1 group-focus-within:text-indigo-400 transition-colors">Your Identity</label>
+             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-2 ml-1 group-focus-within:text-indigo-500 dark:group-focus-within:text-indigo-400 transition-colors">Your Identity</label>
              <div className="relative">
-                <FiUser className="absolute left-4 top-4 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+                <FiUser className="absolute left-4 top-4 text-slate-400 dark:text-slate-500 group-focus-within:text-indigo-500 dark:group-focus-within:text-indigo-400 transition-colors" />
                 <input 
-                  className="w-full pl-10 pr-4 py-3.5 md:py-4 bg-[#1e293b]/50 border border-slate-700/50 rounded-xl focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all font-semibold text-white placeholder-slate-600 text-sm md:text-base"
+                  className="w-full pl-10 pr-4 py-3.5 md:py-4 bg-slate-100 dark:bg-[#1e293b]/50 border border-slate-200 dark:border-slate-700/50 rounded-xl focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all font-semibold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 text-sm md:text-base"
                   placeholder="Enter Display Name"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
@@ -316,14 +379,14 @@ function DevSpace() {
              </div>
            </div>
 
-           {/* Input: Join Session - Reduced margin */}
+           {/* Input: Join Session */}
            <div className="mb-5 md:mb-8 group">
-             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-2 ml-1 group-focus-within:text-fuchsia-400 transition-colors">Join Session</label>
+             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5 md:mb-2 ml-1 group-focus-within:text-fuchsia-500 dark:group-focus-within:text-fuchsia-400 transition-colors">Join Session</label>
              <div className="flex gap-2">
                <div className="relative flex-1">
-                 <FiHash className="absolute left-4 top-4 text-slate-500 group-focus-within:text-fuchsia-400 transition-colors" />
+                 <FiHash className="absolute left-4 top-4 text-slate-400 dark:text-slate-500 group-focus-within:text-fuchsia-500 dark:group-focus-within:text-fuchsia-400 transition-colors" />
                  <input 
-                   className="w-full pl-10 pr-4 py-3.5 md:py-4 bg-[#1e293b]/50 border border-slate-700/50 rounded-xl focus:ring-2 focus:ring-fuchsia-500/50 focus:border-fuchsia-500 outline-none font-mono font-bold text-white uppercase placeholder:normal-case placeholder:font-sans placeholder:text-slate-600 tracking-wider text-sm md:text-base"
+                   className="w-full pl-10 pr-4 py-3.5 md:py-4 bg-slate-100 dark:bg-[#1e293b]/50 border border-slate-200 dark:border-slate-700/50 rounded-xl focus:ring-2 focus:ring-fuchsia-500/50 focus:border-fuchsia-500 outline-none font-mono font-bold text-slate-900 dark:text-white uppercase placeholder:normal-case placeholder:font-sans placeholder:text-slate-400 dark:placeholder:text-slate-600 tracking-wider text-sm md:text-base"
                    placeholder="Room ID"
                    value={roomId}
                    onChange={(e) => setRoomId(e.target.value.toUpperCase())}
@@ -331,18 +394,18 @@ function DevSpace() {
                </div>
                <button 
                  onClick={() => joinSession(roomId)}
-                 className="px-5 md:px-6 bg-white hover:bg-slate-200 text-[#0f172a] font-bold rounded-xl transition-all flex items-center shadow-lg active:scale-95 hover:shadow-white/20"
+                 className="px-5 md:px-6 bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-[#0f172a] font-bold rounded-xl transition-all flex items-center shadow-lg active:scale-95"
                >
                  <FiArrowRight size={20} />
                </button>
              </div>
            </div>
 
-           {/* Divider - Reduced margin */}
+           {/* Divider */}
            <div className="flex items-center gap-4 mb-5 md:mb-8">
-             <div className="h-px bg-white/10 flex-1"></div>
-             <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">OR</span>
-             <div className="h-px bg-white/10 flex-1"></div>
+             <div className="h-px bg-slate-200 dark:bg-white/10 flex-1"></div>
+             <span className="text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest">OR</span>
+             <div className="h-px bg-slate-200 dark:bg-white/10 flex-1"></div>
            </div>
 
            {/* Create New Button */}
@@ -356,8 +419,8 @@ function DevSpace() {
 
         </div>
         
-        {/* Footer Info - Relative position for flow */}
-        <p className="mt-8 relative md:absolute md:bottom-6 text-slate-600 text-xs font-medium opacity-60 hover:opacity-100 transition-opacity cursor-default text-center">DevNexus v3.0 • Secured Workspace</p>
+        {/* Footer Info */}
+        <p className="mt-8 relative md:absolute md:bottom-6 text-slate-400 dark:text-slate-600 text-xs font-medium opacity-60 hover:opacity-100 transition-opacity cursor-default text-center">Relay v3.0 • Secured Workspace</p>
       </div>
     );
   }
@@ -441,7 +504,7 @@ function DevSpace() {
 
                       {aiResponse && (
                          <div className="mt-6 pt-6 border-t border-white/10 animate-fade-in pb-8">
-                            <div className="text-indigo-400 font-bold mb-4 uppercase tracking-wider text-xs flex items-center gap-2 border-b border-indigo-500/30 pb-2"><FiCpu size={14} /> Analysis Result</div>
+                            <div className="text-indigo-400 font-bold mb-4 uppercase tracking-wider text-xs flex items-center gap-2 border-b border-indigo-500/30 pb-2"><FiZap size={14} /> Analysis Result</div>
                             <div className="prose prose-invert max-w-none"><ReactMarkdown components={{p: ({node, ...props}) => <p className="text-sm leading-7 text-slate-300 mb-4 font-light" {...props} />, h1: ({node, ...props}) => <h1 className="text-lg font-bold text-white mb-3 mt-5 border-b border-white/10 pb-1" {...props} />, h2: ({node, ...props}) => <h2 className="text-base font-bold text-blue-200 mb-2 mt-4" {...props} />, strong: ({node, ...props}) => <span className="font-bold text-emerald-400" {...props} />, ul: ({node, ...props}) => <ul className="list-disc pl-5 space-y-2 text-slate-300 mb-4" {...props} />, li: ({node, ...props}) => <li className="text-sm pl-1 marker:text-slate-500" {...props} />, code: ({node, inline, className, children, ...props}) => !inline ? (<div className="bg-[#0b1120] p-4 rounded-xl border border-white/10 my-4 overflow-x-auto shadow-lg"><code className="text-xs font-mono text-blue-300 leading-relaxed" {...props}>{children}</code></div>) : (<code className="bg-indigo-500/20 px-1.5 py-0.5 rounded text-xs font-mono text-indigo-300 border border-indigo-500/30" {...props}>{children}</code>)}}>{aiResponse}</ReactMarkdown></div>
                          </div>
                       )}
@@ -496,4 +559,4 @@ function DevSpace() {
   );
 }
 
-export default DevSpace;
+export default RelaySandBox;

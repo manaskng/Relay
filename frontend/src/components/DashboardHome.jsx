@@ -3,7 +3,8 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import {
   FiHome, FiFileText, FiCode, FiLayers, FiPlus,
-  FiCpu, FiArrowRight, FiCalendar, FiActivity, FiZap
+  FiZap, FiArrowRight, FiCalendar, FiActivity,
+  FiTrendingUp, FiBarChart2, FiTarget, FiAward
 } from "react-icons/fi";
 
 // ──────────────────────────────────────────────────────
@@ -62,6 +63,7 @@ const ActivityItem = ({ action, time, icon: Icon }) => (
 
 function DashboardHome({ setActiveTab }) {
   const [stats, setStats] = useState({ docs: 0, snippets: 0, tasks: 0 });
+  const [relayScore, setRelayScore] = useState({ score: 0, level: "Beginner", streak: 0, completionRate: 0, totalCompleted: 0, totalTasks: 0 });
   const [activity, setActivity] = useState([]);
   const [contests, setContests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -113,6 +115,34 @@ function DashboardHome({ setActiveTab }) {
           .slice(0, 8);
 
         setActivity(allItems);
+
+        // ── Calculate Relay Score & Streak ──
+        const completedTasks = tasks.filter(t => t.isCompleted);
+        const completionRate = tasks.length > 0 ? Math.round((completedTasks.length / tasks.length) * 100) : 0;
+
+        // Calculate streak: consecutive days with activity (going backwards from today)
+        const allDates = new Set();
+        [...notes, ...snippets, ...tasks].forEach(item => {
+          const d = new Date(item.updatedAt || item.createdAt);
+          allDates.add(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`);
+        });
+        
+        let streak = 0;
+        const today = new Date();
+        for (let i = 0; i < 365; i++) {
+          const d = new Date(today);
+          d.setDate(d.getDate() - i);
+          const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+          if (allDates.has(key)) streak++;
+          else if (i > 0) break; // Allow today to have no activity yet
+        }
+
+        // Score formula
+        const rawScore = (notes.length * 10) + (snippets.length * 15) + (completedTasks.length * 20) + (streak * 5);
+        const score = Math.min(rawScore, 1000);
+        const level = score >= 901 ? "Legend" : score >= 601 ? "Veteran" : score >= 301 ? "Architect" : score >= 101 ? "Builder" : "Beginner";
+
+        setRelayScore({ score, level, streak, completionRate, totalCompleted: completedTasks.length, totalTasks: tasks.length });
 
         // Fetch upcoming contests
         try {
@@ -186,6 +216,78 @@ function DashboardHome({ setActiveTab }) {
         <StatCard icon={FiCode} label="Snippets" value={stats.snippets} accent="bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400" delay={0.15} />
         <StatCard icon={FiLayers} label="Active Tasks" value={stats.tasks} accent="bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400" delay={0.2} />
       </div>
+
+      {/* Relay Score Summary */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25, duration: 0.4 }}
+        className="rounded-2xl border border-slate-200 dark:border-white/10 bg-gradient-to-r from-white via-white to-white dark:from-[#0f172a] dark:via-[#0f172a]/80 dark:to-indigo-950/30 overflow-hidden"
+      >
+        <div className="p-5 md:p-6 flex flex-col md:flex-row items-center gap-6">
+          {/* Score Ring */}
+          <div className="relative shrink-0">
+            <svg width="100" height="100" viewBox="0 0 100 100" className="transform -rotate-90">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" strokeWidth="6" className="text-slate-100 dark:text-white/5" />
+              <circle
+                cx="50" cy="50" r="42" fill="none" strokeWidth="6" strokeLinecap="round"
+                stroke="url(#scoreGradient)"
+                strokeDasharray={`${(relayScore.score / 1000) * 264} 264`}
+                className="transition-all duration-1000 ease-out"
+              />
+              <defs>
+                <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#6366f1" />
+                  <stop offset="50%" stopColor="#a855f7" />
+                  <stop offset="100%" stopColor="#d946ef" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-2xl font-black text-slate-900 dark:text-white">{relayScore.score}</span>
+              <span className="text-[9px] font-bold text-indigo-500 uppercase tracking-widest">{relayScore.level}</span>
+            </div>
+          </div>
+
+          {/* Score Metrics */}
+          <div className="flex-1 grid grid-cols-3 gap-4 md:gap-6 w-full">
+            <div className="text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-1.5 mb-1">
+                <FiTrendingUp size={12} className="text-emerald-500" />
+                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Streak</span>
+              </div>
+              <p className="text-2xl font-black text-slate-900 dark:text-white">{relayScore.streak}<span className="text-sm font-bold text-slate-400 ml-1">days</span></p>
+            </div>
+            <div className="text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-1.5 mb-1">
+                <FiTarget size={12} className="text-blue-500" />
+                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Completion</span>
+              </div>
+              <p className="text-2xl font-black text-slate-900 dark:text-white">{relayScore.completionRate}<span className="text-sm font-bold text-slate-400 ml-1">%</span></p>
+              <div className="w-full h-1.5 bg-slate-100 dark:bg-white/5 rounded-full mt-1.5 overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-1000" style={{ width: `${relayScore.completionRate}%` }} />
+              </div>
+            </div>
+            <div className="text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-1.5 mb-1">
+                <FiAward size={12} className="text-amber-500" />
+                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Done</span>
+              </div>
+              <p className="text-2xl font-black text-slate-900 dark:text-white">{relayScore.totalCompleted}<span className="text-sm font-bold text-slate-400 ml-1">/{relayScore.totalTasks}</span></p>
+            </div>
+          </div>
+
+          {/* View Analytics CTA */}
+          <button
+            onClick={() => setActiveTab("analytics")}
+            className="shrink-0 px-5 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-indigo-500/20 flex items-center gap-2 group active:scale-95"
+          >
+            <FiBarChart2 size={14} />
+            <span className="hidden sm:inline">Analytics</span>
+            <FiArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+          </button>
+        </div>
+      </motion.div>
 
       {/* Main Grid: Activity + Contests */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -282,8 +384,8 @@ function DashboardHome({ setActiveTab }) {
             delay={0.1}
           />
           <QuickAction
-            icon={FiCpu}
-            label="Start DevSpace"
+            icon={FiZap}
+            label="RelaySandBox"
             description="Launch collaborative coding"
             onClick={() => setActiveTab("devspace")}
             accent="bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400"

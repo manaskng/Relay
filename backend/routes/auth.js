@@ -108,9 +108,9 @@ router.post("/forgot-password", async (req, res) => {
     await axios.post(
       "https://api.brevo.com/v3/smtp/email",
       {
-        sender: { email: process.env.BREVO_SENDER_EMAIL, name: "DevNexus" },
+        sender: { email: process.env.BREVO_SENDER_EMAIL, name: "Relay" },
         to: [{ email: user.email }],
-        subject: "Reset your DevNexus password",
+        subject: "Reset your Relay password",
         htmlContent: `<p>Click here: <a href="${resetUrl}">Reset Password</a></p>`,
       },
       { headers: { "api-key": process.env.BREVO_API_KEY, "Content-Type": "application/json" } }

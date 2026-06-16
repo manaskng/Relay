@@ -9,7 +9,7 @@ import { FiX, FiEye, FiEdit3, FiTrash2, FiFileText } from "react-icons/fi";
 // No backend, no title, no saving flow — just write.
 // ──────────────────────────────────────────────────────
 
-const STORAGE_KEY = "devnexus_scratchpad";
+const STORAGE_KEY = "relay_scratchpad";
 
 function ScratchPad({ isOpen, onClose }) {
   const [content, setContent] = useState("");

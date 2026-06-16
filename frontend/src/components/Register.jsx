@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { FiUser, FiMail, FiLock, FiCpu } from "react-icons/fi";
+import { FiUser, FiMail, FiLock, FiZap } from "react-icons/fi";
 
 function Register({ setUser }) {
   const [username, setUsername] = useState("");
@@ -35,9 +35,9 @@ function Register({ setUser }) {
         
         <div className="text-center mb-8">
            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 mb-4 shadow-lg">
-              <FiCpu className="text-white text-xl" />
+              <FiZap className="text-white text-xl" />
            </div>
-           <h2 className="text-3xl font-bold text-white mb-2">Join DevNexus</h2>
+           <h2 className="text-3xl font-bold text-white mb-2">Join Relay</h2>
            <p className="text-gray-400">Initialize your developer environment</p>
         </div>
         

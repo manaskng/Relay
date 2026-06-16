@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  FiSearch, FiFileText, FiCode, FiLayers, FiCpu,
+  FiSearch, FiFileText, FiCode, FiLayers, FiZap,
   FiUser, FiSun, FiMoon, FiHome, FiCalendar,
   FiPlus, FiCommand, FiArrowRight
 } from "react-icons/fi";
@@ -17,11 +17,12 @@ const ACTIONS = [
   // Navigation
   { id: "nav-home", label: "Go to Home", icon: FiHome, category: "Navigate", keywords: "home dashboard overview" },
   { id: "nav-docs", label: "Go to DevDocs", icon: FiFileText, category: "Navigate", keywords: "documents notes devdocs" },
-  { id: "nav-devspace", label: "Go to DevSpace", icon: FiCpu, category: "Navigate", keywords: "devspace code editor live collaborate" },
+  { id: "nav-devspace", label: "Go to DevSpace", icon: FiZap, category: "Navigate", keywords: "devspace code editor live collaborate" },
   { id: "nav-snippets", label: "Go to Code Vault", icon: FiCode, category: "Navigate", keywords: "snippets code library vault algorithms" },
   { id: "nav-tasks", label: "Go to Task Board", icon: FiLayers, category: "Navigate", keywords: "tasks todo board objectives" },
   { id: "nav-contests", label: "Go to Contest Calendar", icon: FiCalendar, category: "Navigate", keywords: "contests calendar codeforces leetcode codechef" },
   { id: "nav-profile", label: "Go to Profile Manager", icon: FiUser, category: "Navigate", keywords: "profile portfolio settings" },
+  { id: "nav-analytics", label: "Go to Analytics", icon: FiCalendar, category: "Navigate", keywords: "analytics stats score streak productivity metrics" },
   // Create
   { id: "create-doc", label: "Create New Document", icon: FiPlus, category: "Create", keywords: "new document note create" },
   { id: "create-snippet", label: "Create New Snippet", icon: FiPlus, category: "Create", keywords: "new snippet code algorithm create" },

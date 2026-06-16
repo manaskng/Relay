@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
   FiHome, FiFileText, FiCode, FiUser, FiGrid, FiLayers,
-  FiCpu, FiCalendar, FiEdit3, FiCommand
+  FiZap, FiCalendar, FiEdit3, FiCommand, FiBarChart2, FiClock
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
@@ -11,10 +11,11 @@ import NoteList from "./NoteList";           // DevDocs
 import SnippetLibrary from "./SnippetLibrary"; // Code Vault
 import ProfileManager from "./ProfileManager";
 import TaskBoard from "./TaskBoard";
-import DevSpace from "./DevSpace";
+import RelaySandBox from "./RelaySandBox";
 
 // ── New Modules ──
 import DashboardHome from "./DashboardHome";
+import Analytics from "./Analytics";
 
 import CommandPalette from "./CommandPalette";
 import ScratchPad from "./ScratchPad";
@@ -73,6 +74,7 @@ function Dashboard() {
   const [activeTab, setActiveTab] = useState("home");
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isScratchPadOpen, setIsScratchPadOpen] = useState(false);
+  const [isFocusTimerOpen, setIsFocusTimerOpen] = useState(false);
   const { toggleTheme } = useTheme();
 
   // ── Global Keyboard Shortcuts ──
@@ -104,6 +106,7 @@ function Dashboard() {
       case "nav-snippets":  setActiveTab("snippets"); break;
       case "nav-tasks":     setActiveTab("tasks"); break;
       case "nav-profile":   setActiveTab("profiles"); break;
+      case "nav-analytics": setActiveTab("analytics"); break;
       // Create — navigate to the relevant tab (the tab handles creation)
       case "create-doc":     setActiveTab("docs"); break;
       case "create-snippet": setActiveTab("snippets"); break;
@@ -125,7 +128,7 @@ function Dashboard() {
 
         {/* Brand */}
         <div className="h-16 flex items-center justify-center lg:justify-start lg:px-6 border-b border-slate-100 dark:border-white/5">
-          <FiGrid className="text-blue-600 lg:mr-3" size={24} />
+          <FiZap className="text-blue-600 lg:mr-3" size={24} />
           <span className="font-bold text-slate-800 dark:text-white hidden lg:block">Workspace</span>
         </div>
 
@@ -136,24 +139,26 @@ function Dashboard() {
           <div className="my-3 border-t border-slate-100 dark:border-white/5 mx-2" />
 
           <NavItem id="docs"     icon={FiFileText} label="DevDocs"        activeTab={activeTab} setActiveTab={setActiveTab} />
-          <NavItem id="devspace" icon={FiCpu}      label="DevSpace"       activeTab={activeTab} setActiveTab={setActiveTab} badge="Live" />
+          <NavItem id="devspace" icon={FiZap}      label="RelaySandBox"       activeTab={activeTab} setActiveTab={setActiveTab} badge="Live" />
           <NavItem id="snippets" icon={FiCode}     label="Code Vault"     activeTab={activeTab} setActiveTab={setActiveTab} />
           <NavItem id="tasks"    icon={FiLayers}   label="Task Board"     activeTab={activeTab} setActiveTab={setActiveTab} />
 
           <div className="my-3 border-t border-slate-100 dark:border-white/5 mx-2" />
 
+          <NavItem id="analytics" icon={FiBarChart2} label="Analytics"     activeTab={activeTab} setActiveTab={setActiveTab} badge="New" />
           <NavItem id="profiles" icon={FiUser}     label="Profile"        activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
 
         {/* Sidebar Footer — Focus Timer + Scratch Pad shortcut */}
         <div className="border-t border-slate-100 dark:border-white/5">
-          {/* Focus Timer Widget */}
-          <div className="hidden lg:block">
-            <FocusTimer />
-          </div>
-
           {/* Keyboard Shortcut Hints */}
-          <div className="p-3 hidden lg:flex flex-col gap-1.5 border-t border-slate-100 dark:border-white/5">
+          <div className="p-3 hidden lg:flex flex-col gap-1.5">
+            <button
+              onClick={() => setIsFocusTimerOpen(true)}
+              className="flex items-center justify-between px-2 py-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-600 dark:hover:text-slate-300 transition-colors text-xs"
+            >
+              <span className="flex items-center gap-2"><FiClock size={12} /> Focus Timer</span>
+            </button>
             <button
               onClick={() => setIsCommandPaletteOpen(true)}
               className="flex items-center justify-between px-2 py-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-slate-600 dark:hover:text-slate-300 transition-colors text-xs"
@@ -171,7 +176,7 @@ function Dashboard() {
           </div>
 
           <div className="p-3 text-center lg:text-left text-[10px] text-slate-400 dark:text-gray-600 border-t border-slate-100 dark:border-white/5">
-            <span className="hidden lg:inline">DevNexus v3.0</span>
+            <span className="hidden lg:inline">Relay v3.0</span>
           </div>
         </div>
       </aside>
@@ -203,9 +208,10 @@ function Dashboard() {
             >
               {activeTab === "home"     && <DashboardHome setActiveTab={setActiveTab} />}
               {activeTab === "docs"     && <NoteList />}
-              {activeTab === "devspace" && <DevSpace />}
+              {activeTab === "devspace" && <RelaySandBox />}
               {activeTab === "snippets" && <SnippetLibrary />}
               {activeTab === "tasks"    && <TaskBoard />}
+              {activeTab === "analytics" && <Analytics />}
               {activeTab === "profiles" && <ProfileManager />}
             </motion.div>
           </AnimatePresence>
@@ -219,9 +225,10 @@ function Dashboard() {
         {[
           { id: "home",     icon: FiHome,     label: "Home" },
           { id: "docs",     icon: FiFileText, label: "Docs" },
-          { id: "devspace", icon: FiCpu,      label: "Space" },
+          { id: "devspace", icon: FiZap,      label: "Space" },
           { id: "snippets", icon: FiCode,     label: "Code" },
           { id: "tasks",    icon: FiLayers,   label: "Tasks" },
+          { id: "analytics", icon: FiBarChart2, label: "Stats" },
           { id: "profiles", icon: FiUser,     label: "Profile" },
         ].map(({ id, icon: Icon, label }) => (
           <button
@@ -251,6 +258,36 @@ function Dashboard() {
         isOpen={isScratchPadOpen}
         onClose={() => setIsScratchPadOpen(false)}
       />
+
+      {/* Focus Timer Overlay */}
+      <AnimatePresence>
+        {isFocusTimerOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm"
+            onClick={() => setIsFocusTimerOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-[320px] relative"
+            >
+              <button
+                onClick={() => setIsFocusTimerOpen(false)}
+                className="absolute -top-2 -right-2 z-10 w-7 h-7 bg-slate-800 border border-white/10 rounded-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-colors text-xs"
+              >
+                ✕
+              </button>
+              <FocusTimer />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   );

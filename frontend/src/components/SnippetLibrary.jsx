@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom"; // 
-import { FiPlus, FiCode, FiSearch, FiZap, FiTag, FiCpu, FiCopy, FiArrowRight } from "react-icons/fi";
+import { FiPlus, FiCode, FiSearch, FiZap, FiTag, FiCopy, FiArrowRight } from "react-icons/fi";
 import { motion } from "framer-motion";
 import SnippetCard from "./SnippetCard";
 
@@ -145,7 +145,7 @@ const EmptySnippetView = ({ onAdd }) => (
           <span className="font-medium">Instant 1-Click Copy</span>
         </li>
         <li className="flex items-center gap-3 text-slate-700 dark:text-gray-300">
-          <div className="p-2 rounded-lg bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400"><FiCpu /></div>
+          <div className="p-2 rounded-lg bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400"><FiZap /></div>
           <span className="font-medium">Track Time & Space Complexity</span>
         </li>
         <li className="flex items-center gap-3 text-slate-700 dark:text-gray-300">

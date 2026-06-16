@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate
 import axios from 'axios';
-import { FiSearch, FiFileText, FiCode, FiX, FiLoader, FiCpu, FiLogOut, FiSun, FiMoon, FiCalendar } from 'react-icons/fi';
+import { FiSearch, FiFileText, FiCode, FiX, FiLoader, FiZap, FiLogOut, FiSun, FiMoon, FiCalendar } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import ContestWidget from './ContestWidget';
@@ -79,10 +79,10 @@ function Navbar({ user, setUser }) {
           {/* 1. BRAND LOGO */}
           <Link to="/" className="flex items-center gap-2 group shrink-0">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-              <FiCpu size={18} />
+              <FiZap size={18} />
             </div>
             <span className="text-xl font-bold text-slate-800 dark:text-white tracking-tight hidden sm:block">
-              DevNexus
+              Relay
             </span>
           </Link>
           

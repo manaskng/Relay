@@ -98,7 +98,7 @@ function Sidebar({ activeTab, setActiveTab }) {
              D
            </div>
            <div>
-             <h1 className="font-bold text-slate-800 dark:text-white text-lg leading-tight tracking-tight">DevNexus</h1>
+             <h1 className="font-bold text-slate-800 dark:text-white text-lg leading-tight tracking-tight">Relay</h1>
              <p className="text-[10px] text-slate-400 font-medium tracking-wide uppercase">Productivity OS</p>
            </div>
         </div>

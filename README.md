@@ -1,10 +1,10 @@
-# DevNexus
+# Relay
 **The Ultimate Collaborative Workspace for Developers.**
 ---
-DevNexus unifies the fragmented workflow of modern software engineers. It combines real-time collaborative coding, AI-powered assistance, Kanban-style task tracking, and documentation management into a single, cohesive ecosystem.
+Relay unifies the fragmented workflow of modern software engineers. It combines real-time collaborative coding, AI-powered assistance, Kanban-style task tracking, and documentation management into a single, cohesive ecosystem.
 
 ###  Technical Spotlight: High-Performance Search Architecture
-Unlike traditional applications that use slow database Regex queries (O(N) scanning), DevNexus leverages **MongoDB Atlas Search**.
+Unlike traditional applications that use slow database Regex queries (O(N) scanning), Relay leverages **MongoDB Atlas Search**.
 * **Architecture:** Utilizes **Apache Lucene Inverted Indexes** to map content directly to documents.
 * **Performance:** Achieves **<10ms latency** on searches across thousands of documents and code snippets (approx. **100x faster** than standard queries).
 * **Capabilities:** Enables **Fuzzy Matching** (typo tolerance), relevance scoring, and autocomplete functionality across the entire workspace.
@@ -22,7 +22,7 @@ Unlike traditional applications that use slow database Regex queries (O(N) scann
 ---
 ### Youtube Video workflow Live:
 > **[▶️ Click here to watch the full video on YouTube](https://youtu.be/EKsHeZQpwYA)**
-![DevNexus_gif](https://github.com/user-attachments/assets/cf0da425-dae3-449b-b988-143cb4cbaf6a)
+![Relay_gif](https://github.com/user-attachments/assets/cf0da425-dae3-449b-b988-143cb4cbaf6a)
 
 
 ## 🛠 Tech Stack
@@ -37,10 +37,10 @@ Unlike traditional applications that use slow database Regex queries (O(N) scann
 
 ## 💎 Key Features
 
-### 1. Real-Time DevSpace (Collaboration & AI)
+### 1. Real-Time RelaySandBox (Collaboration & AI)
 * **Live Coding Rooms:** Create instant rooms where multiple users can join via Room ID.
   <br/>
-  <img width="100%" alt="DevSpace Desktop View" src="https://github.com/user-attachments/assets/b4e20100-ca54-46b8-b8df-923a68d6bce7" />
+  <img width="100%" alt="RelaySandBox Desktop View" src="https://github.com/user-attachments/assets/b4e20100-ca54-46b8-b8df-923a68d6bce7" />
 
 * **Socket.io Synchronization:** See active users, typing indicators, and code changes in real-time.
   *For data efficiency, we utilized MongoDB TTL indexes (24-hour expiry) for activity logs.*
@@ -86,7 +86,7 @@ Unlike traditional applications that use slow database Regex queries (O(N) scann
 <img alt="Snippet Library Light Mode" src="https://github.com/user-attachments/assets/60d00622-619b-46cb-aed9-957f162d506e" width="650" />
 
 * **Syntax Highlighting:** Store reusable algorithms with automatic language detection using *react-syntax-highlighter*.
-* **Direct Save:** Push working code from the DevSpace compiler directly to your Vault.
+* **Direct Save:** Push working code from the RelaySandBox compiler directly to your Vault.
 * **Smart Search:** Instantly filter snippets by tags (e.g., `#dp`, `#recursion`) or title.
 
 <img alt="Snippet Library Dark Mode with Search" src="https://github.com/user-attachments/assets/20c45553-dd6d-48fb-8b6d-c60e473aa628" width="650" />
@@ -112,10 +112,10 @@ Unlike traditional applications that use slow database Regex queries (O(N) scann
 
 ## 🔌 APIs, Libraries & Integrations
 
-DevNexus leverages a suite of powerful APIs to deliver a seamless experience:
+Relay leverages a suite of powerful APIs to deliver a seamless experience:
 
 ### **Core Intelligence & Real-Time**
-* **[Socket.io](https://socket.io):** Enables bidirectional, real-time communication for the coding environment (DevSpace).
+* **[Socket.io](https://socket.io):** Enables bidirectional, real-time communication for the coding environment (RelaySandBox).
 * **[Google Gemini API](https://ai.google.dev):** Powers the Neural Engine for explaining code logic and refactoring suggestions.
 * **[JDoodle / Compiler API](https://www.jdoodle.com/compiler-api/):** Provides the backend infrastructure for compiling and executing code in multiple languages securely.
 
@@ -129,13 +129,13 @@ DevNexus leverages a suite of powerful APIs to deliver a seamless experience:
 ---
 ##  Local Setup and Installation
 
-Follow these steps to run the complete DevNexus ecosystem locally.
+Follow these steps to run the complete Relay ecosystem locally.
 
 ### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/manasraj/DevNexus.git
-cd DevNexus
+cd Relay
 
 ```
 
@@ -194,7 +194,7 @@ npm run dev
 
 ## 🐳 Docker Support
 
-DevNexus is fully dockerized. You can spin up the entire stack (Frontend + Backend + MongoDB) with a single command.
+Relay is fully dockerized. You can spin up the entire stack (Frontend + Backend + MongoDB) with a single command.
 
 ```bash
 docker-compose up --build
@@ -275,4 +275,4 @@ This project is distributed under the MIT License. See `LICENSE` for more inform
 * **GitHub:** github.com/manaskng
 * **Email:** manasraj850@gmail.com
 
-© 2025 DevNexus. All rights reserved.
+© 2025 Relay. All rights reserved.

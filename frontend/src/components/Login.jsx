@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { FiMail, FiLock, FiCpu } from "react-icons/fi";
+import { FiMail, FiLock, FiZap } from "react-icons/fi";
 
 function Login({ setUser }) {
   const [email, setEmail] = useState('');
@@ -37,10 +37,10 @@ function Login({ setUser }) {
         {/* Header */}
         <div className="text-center mb-8">
            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 mb-4 shadow-lg">
-              <FiCpu className="text-white text-xl" />
+              <FiZap className="text-white text-xl" />
            </div>
            <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-           <p className="text-gray-400">Log in to DevNexus OS</p>
+           <p className="text-gray-400">Log in to Relay OS</p>
         </div>
         
         {error && <p className="text-red-400 text-sm text-center mb-6 bg-red-500/10 border border-red-500/20 p-3 rounded-lg">{error}</p>}
