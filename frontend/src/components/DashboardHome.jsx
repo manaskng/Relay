@@ -4,17 +4,12 @@ import { Link } from "react-router-dom";
 import RelayLogo from './RelayLogo';
 import { Skeleton } from './Skeleton';
 import { motion } from "framer-motion";
+import { BarChart, Bar, ResponsiveContainer, Tooltip as RechartsTooltip, Cell } from "recharts";
 import {
   FiHome, FiFileText, FiCode, FiLayers, FiPlus,
   FiZap, FiArrowRight, FiCalendar, FiActivity,
-  FiTrendingUp, FiBarChart2, FiTarget, FiAward
+  FiTrendingUp, FiBarChart2, FiTarget, FiAward, FiGithub, FiBarChart
 } from "react-icons/fi";
-
-// ──────────────────────────────────────────────────────
-// Dashboard Home — The command center.
-// Shows quick stats, recent activity, quick actions,
-// and upcoming contests at a glance.
-// ──────────────────────────────────────────────────────
 
 const StatCard = ({ icon: Icon, label, value, accent, delay = 0 }) => (
   <motion.div
@@ -68,7 +63,9 @@ function DashboardHome({ setActiveTab }) {
   const [stats, setStats] = useState({ docs: 0, snippets: 0, tasks: 0 });
   const [relayScore, setRelayScore] = useState({ score: 0, level: "Beginner", streak: 0, completionRate: 0, totalCompleted: 0, totalTasks: 0 });
   const [activity, setActivity] = useState([]);
+  const [chartData, setChartData] = useState([]);
   const [contests, setContests] = useState([]);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const API_URL = import.meta.env.VITE_API_URL;
@@ -79,16 +76,19 @@ function DashboardHome({ setActiveTab }) {
       const headers = { Authorization: `Bearer ${token}` };
 
       try {
-        // Fetch stats from existing endpoints in parallel
-        const [notesRes, snippetsRes, tasksRes] = await Promise.allSettled([
+        const [notesRes, snippetsRes, tasksRes, profileRes] = await Promise.allSettled([
           axios.get(`${API_URL}/api/notes`, { headers }),
           axios.get(`${API_URL}/api/snippets`, { headers }),
           axios.get(`${API_URL}/api/tasks`, { headers }),
+          axios.get(`${API_URL}/api/user-profile`, { headers }),
         ]);
 
         const notes = notesRes.status === "fulfilled" ? notesRes.value.data : [];
         const snippets = snippetsRes.status === "fulfilled" ? snippetsRes.value.data : [];
         const tasks = tasksRes.status === "fulfilled" ? tasksRes.value.data : [];
+        const prof = profileRes.status === "fulfilled" ? profileRes.value.data : null;
+        
+        if (prof) setProfile(prof);
 
         setStats({
           docs: notes.length,
@@ -96,34 +96,36 @@ function DashboardHome({ setActiveTab }) {
           tasks: tasks.filter(t => !t.isCompleted).length,
         });
 
-        // Build activity feed from timestamps
         const allItems = [
-          ...notes.map(n => ({
-            action: `Edited "${n.title}"`,
-            time: n.updatedAt,
-            icon: FiFileText,
-          })),
-          ...snippets.map(s => ({
-            action: `Saved snippet "${s.title}"`,
-            time: s.updatedAt || s.createdAt,
-            icon: FiCode,
-          })),
-          ...tasks.filter(t => t.isCompleted).map(t => ({
-            action: `Completed "${t.content}"`,
-            time: t.updatedAt || t.createdAt,
-            icon: FiLayers,
-          })),
+          ...notes.map(n => ({ action: `Edited "${n.title}"`, time: n.updatedAt, icon: FiFileText })),
+          ...snippets.map(s => ({ action: `Saved snippet "${s.title}"`, time: s.updatedAt || s.createdAt, icon: FiCode })),
+          ...tasks.filter(t => t.isCompleted).map(t => ({ action: `Completed "${t.content}"`, time: t.updatedAt || t.createdAt, icon: FiLayers })),
         ]
           .sort((a, b) => new Date(b.time) - new Date(a.time))
-          .slice(0, 8);
 
-        setActivity(allItems);
+        setActivity(allItems.slice(0, 8));
 
-        // ── Calculate Relay Score & Streak ──
+        // Build 7-day activity chart
+        const last7Days = Array.from({length: 7}).map((_, i) => {
+          const d = new Date();
+          d.setDate(d.getDate() - (6 - i));
+          return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+        });
+        
+        const chartDataMap = {};
+        last7Days.forEach(date => { chartDataMap[date] = { name: date.split('-')[2], count: 0 } });
+        
+        allItems.forEach(item => {
+          const d = new Date(item.time);
+          const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+          if (chartDataMap[key]) chartDataMap[key].count++;
+        });
+        
+        setChartData(Object.values(chartDataMap));
+
         const completedTasks = tasks.filter(t => t.isCompleted);
         const completionRate = tasks.length > 0 ? Math.round((completedTasks.length / tasks.length) * 100) : 0;
 
-        // Calculate streak: consecutive days with activity (going backwards from today)
         const allDates = new Set();
         [...notes, ...snippets, ...tasks].forEach(item => {
           const d = new Date(item.updatedAt || item.createdAt);
@@ -137,22 +139,19 @@ function DashboardHome({ setActiveTab }) {
           d.setDate(d.getDate() - i);
           const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
           if (allDates.has(key)) streak++;
-          else if (i > 0) break; // Allow today to have no activity yet
+          else if (i > 0) break; 
         }
 
-        // Score formula
         const rawScore = (notes.length * 10) + (snippets.length * 15) + (completedTasks.length * 20) + (streak * 5);
         const score = Math.min(rawScore, 1000);
         const level = score >= 901 ? "Legend" : score >= 601 ? "Veteran" : score >= 301 ? "Architect" : score >= 101 ? "Builder" : "Beginner";
 
         setRelayScore({ score, level, streak, completionRate, totalCompleted: completedTasks.length, totalTasks: tasks.length });
 
-        // Fetch upcoming contests
         try {
           const contestRes = await axios.get(`${API_URL}/api/contests`);
           setContests((contestRes.data.contests || []).slice(0, 3));
         } catch {
-          // Contest API optional — don't break anything
         }
       } catch (err) {
         console.error("Dashboard data fetch error:", err);
@@ -189,43 +188,28 @@ function DashboardHome({ setActiveTab }) {
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8 w-full">
-        {/* Header Skeleton */}
         <div className="space-y-3">
           <Skeleton className="h-10 w-64" />
           <Skeleton className="h-4 w-48" />
         </div>
-
-        {/* Stats Row Skeleton */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {[1, 2, 3].map(i => (
-            <Skeleton key={i} className="h-28 w-full" />
-          ))}
+          {[1, 2, 3].map(i => <Skeleton key={i} className="h-28 w-full" />)}
         </div>
-
-        {/* Score Summary Skeleton */}
         <Skeleton className="h-40 w-full" />
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Quick Actions Skeleton */}
           <div className="space-y-4">
             <Skeleton className="h-6 w-32 mb-4" />
             <div className="grid grid-cols-2 gap-3">
-              {[1, 2, 3, 4].map(i => (
-                <Skeleton key={i} className="h-24 w-full" />
-              ))}
+              {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-24 w-full" />)}
             </div>
           </div>
-
-          {/* Activity Skeleton */}
           <div className="space-y-4">
             <div className="flex justify-between items-center mb-4">
               <Skeleton className="h-6 w-32" />
               <Skeleton className="h-4 w-16" />
             </div>
             <div className="space-y-3">
-              {[1, 2, 3].map(i => (
-                <Skeleton key={i} className="h-16 w-full" />
-              ))}
+              {[1, 2, 3].map(i => <Skeleton key={i} className="h-16 w-full" />)}
             </div>
           </div>
         </div>
@@ -261,7 +245,7 @@ function DashboardHome({ setActiveTab }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25, duration: 0.4 }}
-        className="rounded-2xl border border-slate-200 dark:border-white/10 bg-gradient-to-r from-white via-white to-white dark:from-[#0f172a] dark:via-[#0f172a]/80 dark:to-indigo-950/30 overflow-hidden"
+        className="rounded-2xl border border-slate-200 dark:border-white/10 bg-gradient-to-r from-white via-white to-white dark:from-[#0f172a] dark:via-[#0f172a]/80 dark:to-indigo-950/30 overflow-hidden shadow-sm"
       >
         <div className="p-5 md:p-6 flex flex-col md:flex-row items-center gap-6">
           {/* Score Ring */}
@@ -331,7 +315,7 @@ function DashboardHome({ setActiveTab }) {
       {/* Main Grid: Activity + Contests */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Activity Feed */}
-        <div className="lg:col-span-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 overflow-hidden">
+        <div className="lg:col-span-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 overflow-hidden shadow-sm">
           <div className="px-5 py-4 border-b border-slate-100 dark:border-white/5 flex items-center gap-2">
             <FiActivity size={14} className="text-slate-400" />
             <h2 className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Recent Activity</h2>
@@ -355,7 +339,7 @@ function DashboardHome({ setActiveTab }) {
         </div>
 
         {/* Upcoming Contests */}
-        <div className="lg:col-span-2 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 overflow-hidden">
+        <div className="lg:col-span-2 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 overflow-hidden shadow-sm">
           <div className="px-5 py-4 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <FiCalendar size={14} className="text-slate-400" />
@@ -406,6 +390,56 @@ function DashboardHome({ setActiveTab }) {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Bottom Grid: New Features (GitHub & Activity Chart) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+         {/* Activity Chart */}
+         <motion.div 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4 }}
+            className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 overflow-hidden shadow-sm flex flex-col h-56"
+         >
+            <div className="px-5 py-4 border-b border-slate-100 dark:border-white/5 flex items-center gap-2">
+              <FiBarChart size={14} className="text-slate-400" />
+              <h2 className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">7-Day Output</h2>
+            </div>
+            <div className="p-4 flex-1 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData}>
+                  <RechartsTooltip 
+                    cursor={{fill: 'rgba(99, 102, 241, 0.05)'}} 
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    itemStyle={{ color: '#6366f1', fontWeight: 'bold' }}
+                  />
+                  <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                    {chartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.count > 0 ? '#6366f1' : '#e2e8f0'} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+         </motion.div>
+
+         {/* GitHub Stats Panel */}
+         {profile?.githubUsername && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.4 }}
+              className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 overflow-hidden shadow-sm flex flex-col h-56"
+            >
+              <div className="px-5 py-4 border-b border-slate-100 dark:border-white/5 flex items-center gap-2">
+                <FiGithub size={14} className="text-slate-400" />
+                <h2 className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">GitHub Stats</h2>
+              </div>
+              <div className="flex-1 flex justify-center items-center w-full p-2">
+                <img 
+                  src={`https://github-readme-stats.vercel.app/api?username=${profile.githubUsername}&show_icons=true&theme=transparent&hide_border=true&title_color=6366f1&text_color=94a3b8&icon_color=818cf8`} 
+                  className="h-full object-contain max-h-[160px]" 
+                  alt="GitHub Stats"
+                />
+              </div>
+            </motion.div>
+         )}
       </div>
 
       {/* Quick Actions */}

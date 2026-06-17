@@ -21,6 +21,7 @@ import Analytics from "./Analytics";
 
 import CommandPalette from "./CommandPalette";
 import ScratchPad from "./ScratchPad";
+import RagChat from "./RagChat";
 
 // ──────────────────────────────────────────────────────
 // Sidebar Nav Item
@@ -266,8 +267,7 @@ function Dashboard() {
         isOpen={isScratchPadOpen}
         onClose={() => setIsScratchPadOpen(false)}
       />
-
-
+      <RagChat />
 
     </div>
   );

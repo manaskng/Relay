@@ -4,6 +4,35 @@ import { motion } from 'framer-motion';
 import { FiZap } from 'react-icons/fi';
 
 function SplashScreen() {
+  const targetText = "RELAY";
+  const [jumbledText, setJumbledText] = React.useState("");
+
+  React.useEffect(() => {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let iteration = 0;
+    let interval = null;
+
+    interval = setInterval(() => {
+      setJumbledText(targetText
+        .split("")
+        .map((letter, index) => {
+          if(index < iteration) {
+            return targetText[index];
+          }
+          return letters[Math.floor(Math.random() * 26)]
+        })
+        .join("")
+      );
+      
+      if(iteration >= targetText.length){ 
+        clearInterval(interval);
+      }
+      iteration += 1 / 4; // Controls how fast it settles
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="fixed inset-0 bg-[#020617] flex flex-col items-center justify-center z-[9999] overflow-hidden">
       
@@ -26,14 +55,14 @@ function SplashScreen() {
           </div>
         </motion.div>
 
-        {/* Typing Text Effect */}
+        {/* Typing Text Effect / Jumble */}
         <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 tracking-[0.2em] mb-2 font-mono">
-          RELAY
+          {jumbledText || targetText}
         </h1>
         
         <div className="flex items-center gap-2 mt-4">
           <span className="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
-          <span className="text-gray-400 font-mono text-sm tracking-wider uppercase">The Workspace</span>
+          <span className="text-gray-400 font-mono text-sm tracking-wider uppercase">Initialising Workspace Environment ...</span>
         </div>
 
         {/* Progress Bar */}

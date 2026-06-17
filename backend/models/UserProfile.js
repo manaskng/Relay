@@ -36,6 +36,7 @@ const UserProfileSchema = new mongoose.Schema({
   profilePic: { type: String, default: "" }, 
   githubUsername: { type: String, default: "" },
   leetcodeUsername: { type: String, default: "" },
+  codeforcesUsername: { type: String, default: "" },
 
   skills: { type: [String], default: [] }, 
   achievements: { type: [String], default: [] }, 

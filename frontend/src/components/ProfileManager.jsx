@@ -6,9 +6,9 @@ import {
   FiEdit3, FiSave, FiPlus, FiTrash2, FiMapPin, FiMail, 
   FiGithub, FiLinkedin, FiExternalLink, FiZap, FiAward, 
   FiCode, FiShare2, FiCheck, FiDownload, FiMessageSquare, 
-  FiX, FiArrowRight, FiCamera, FiImage, FiStar, FiUploadCloud, FiLoader 
+  FiX, FiArrowRight, FiCamera, FiImage, FiStar, FiUploadCloud, FiLoader, FiBarChart2 
 } from "react-icons/fi";
-
+import MegaStatsDashboard from "./MegaStatsDashboard";
 
 const getSkillIcon = (skillName) => {
   if (!skillName) return null;
@@ -256,6 +256,7 @@ function ProfileManager() {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("about");
+  const [showMegaStats, setShowMegaStats] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
   
   // Track Upload States
@@ -478,27 +479,41 @@ function ProfileManager() {
                 </section>
 
                 {/* STATS */}
-                {(profile.githubUsername || profile.leetcodeUsername) && (
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-4xl mx-auto mb-16">
-                     {profile.githubUsername && (
-                       <div className="border rounded-2xl p-4 flex justify-center bg-white border-slate-200 dark:bg-white/5 dark:border-white/10 shadow-sm overflow-hidden">
-                          <img 
-                            src={`https://github-profile-summary-cards.vercel.app/api/cards/stats?username=${profile.githubUsername}&theme=github_dark`} 
-                            className="w-full max-w-md" 
-                            alt="GitHub Stats"
-                          />
+                {(profile.githubUsername || profile.leetcodeUsername || profile.codeforcesUsername) && (
+                   showMegaStats ? (
+                     <div className="max-w-6xl mx-auto mb-16">
+                        <MegaStatsDashboard onClose={() => setShowMegaStats(false)} />
+                     </div>
+                   ) : (
+                     <div className="flex flex-col items-center mb-16 space-y-6">
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-4xl mx-auto w-full">
+                         {profile.githubUsername && (
+                           <div className="border rounded-2xl p-4 flex justify-center bg-white border-slate-200 dark:bg-white/5 dark:border-white/10 shadow-sm overflow-hidden">
+                              <img 
+                                src={`https://github-profile-summary-cards.vercel.app/api/cards/stats?username=${profile.githubUsername}&theme=github_dark`} 
+                                className="w-full max-w-md" 
+                                alt="GitHub Stats"
+                              />
+                           </div>
+                         )}
+                         {profile.leetcodeUsername && (
+                           <div className="border rounded-2xl p-4 flex justify-center overflow-hidden bg-white border-slate-200 dark:bg-white/5 dark:border-white/10 shadow-sm">
+                              <img 
+                                src={`https://leetcard.jacoblin.cool/${profile.leetcodeUsername}?theme=light&font=Inter&ext=heatmap`} 
+                                className="w-full max-w-md scale-95 dark:invert dark:hue-rotate-180" 
+                                alt="LeetCode Stats"
+                              />
+                           </div>
+                         )}
                        </div>
-                     )}
-                     {profile.leetcodeUsername && (
-                       <div className="border rounded-2xl p-4 flex justify-center overflow-hidden bg-white border-slate-200 dark:bg-white/5 dark:border-white/10 shadow-sm">
-                          <img 
-                            src={`https://leetcard.jacoblin.cool/${profile.leetcodeUsername}?theme=light&font=Inter&ext=heatmap`} 
-                            className="w-full max-w-md scale-95 dark:invert dark:hue-rotate-180" 
-                            alt="LeetCode Stats"
-                          />
-                       </div>
-                     )}
-                   </div>
+                       <button 
+                         onClick={() => setShowMegaStats(true)} 
+                         className="flex items-center gap-2 px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full font-bold shadow-lg transition-transform hover:scale-105"
+                       >
+                         <FiBarChart2 className="w-5 h-5" /> View Deep Analytics
+                       </button>
+                     </div>
+                   )
                 )}
 
                 {/* SKILLS */}
@@ -587,7 +602,7 @@ function ProfileManager() {
 
                 <div className="space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {['fullName', 'headline', 'email', 'location', 'linkedinProfile', 'githubUsername', 'leetcodeUsername', 'portfolioUrl'].map((field) => (
+                        {['fullName', 'headline', 'email', 'location', 'linkedinProfile', 'githubUsername', 'leetcodeUsername', 'codeforcesUsername', 'portfolioUrl'].map((field) => (
                            <div key={field}>
                               <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">{field}</label>
                               <input name={field} className="w-full border p-3 rounded-xl outline-none bg-white border-slate-200 text-slate-900 dark:bg-[#1e293b] dark:border-white/10 dark:text-white" value={formData[field] || ""} onChange={handleChange} />

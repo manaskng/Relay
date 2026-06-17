@@ -15,6 +15,7 @@ import {
   FiAlertTriangle,
 } from "react-icons/fi";
 import { Skeleton } from "./Skeleton";
+import MegaStatsDashboard from "./MegaStatsDashboard";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -746,6 +747,11 @@ export default function Analytics() {
             </div>
           )}
         </SectionCard>
+      </div>
+
+      {/* ── 7. Codolio Mega-Stats Dashboard ── */}
+      <div className="mt-12 w-full">
+        <MegaStatsDashboard />
       </div>
     </motion.div>
   );

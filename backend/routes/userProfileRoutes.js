@@ -33,7 +33,7 @@ router.put("/", protect, async (req, res) => {
         
         const { 
             fullName, headline, about, location, email, 
-            linkedinProfile, portfolioUrl, githubUsername, leetcodeUsername,
+            linkedinProfile, portfolioUrl, githubUsername, leetcodeUsername, codeforcesUsername,
             skills, achievements, projects, resumes,
             profilePic 
         } = req.body;
@@ -44,7 +44,7 @@ router.put("/", protect, async (req, res) => {
             { 
                 $set: { 
                     fullName, headline, about, location, email,
-                    linkedinProfile, portfolioUrl, githubUsername, leetcodeUsername,
+                    linkedinProfile, portfolioUrl, githubUsername, leetcodeUsername, codeforcesUsername,
                     skills, achievements, projects, resumes,
                     // 👇 2. ADD profilePic HERE SO IT GETS SAVED
                     profilePic

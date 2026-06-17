@@ -37,6 +37,7 @@ It's not just a CRUD app. It's a **production-grade, multi-service platform** wi
 |:---|:---|
 | **Real-Time Collaboration** | Multi-user code rooms with live cursors, typing indicators, and activity feeds via Socket.io |
 | **Search Latency** | **<10ms** using MongoDB Atlas Search (Apache Lucene inverted indexes) — **~100× faster** than Regex |
+| **Workspace AI (RAG)** | Custom Retrieval-Augmented Generation pipeline using `text-embedding-004` and Atlas Vector Search |
 | **AI Engine** | Dual-model failover: Gemini 2.5-flash → 2.0-flash with explain, refactor, and convert actions |
 | **Code Execution** | 11 languages (JS, TS, Python, Java, C, C++, Go, Rust, PHP, Ruby, Swift) with dual-compiler failover |
 | **Rate Limiting** | Redis sorted-set sliding window algorithm (not naive token bucket) — AI: 10 req/min, Compiler: 15 req/min |
@@ -97,6 +98,21 @@ graph TB
     style Data fill:#1e293b,stroke:#f59e0b,color:#e2e8f0
     style External fill:#1e293b,stroke:#8b5cf6,color:#e2e8f0
 ```
+
+---
+
+## 🧠 AI Knowledge Pipeline (RAG)
+
+> Relay isn't just a wrapper around the Gemini API. It features a fully custom **Retrieval-Augmented Generation (RAG)** architecture built entirely in Node.js, allowing developers to literally "chat" with their own codebase and documentation.
+
+### The Vector Engineering Flow
+
+1. **Embedding Generation**: When a user saves a Code Snippet or DevDoc, Mongoose `pre('save')` hooks automatically send the content to Google's `text-embedding-004` model.
+2. **Vector Storage**: The resulting 768-dimensional mathematical vector is saved directly into MongoDB alongside the document.
+3. **Semantic Search**: When the user asks the Workspace AI a question (e.g., *"Where is my binary search code?"*), the backend embeds the query and executes an Atlas `$vectorSearch` aggregation pipeline to find the 3 most mathematically relevant snippets and notes.
+4. **Context Injection**: The retrieved personal code is injected into the Gemini prompt as hidden context, allowing the AI to answer specifically based on the user's exact workspace data.
+
+This completely eliminates AI hallucinations and turns Relay into a personalized "second brain" for developers.
 
 ---
 
