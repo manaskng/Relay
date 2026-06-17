@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import RelayLogo from './RelayLogo';
+import { Skeleton } from './Skeleton';
 import { motion } from "framer-motion";
 import {
   FiHome, FiFileText, FiCode, FiLayers, FiPlus,
@@ -187,18 +188,45 @@ function DashboardHome({ setActiveTab }) {
 
   if (loading) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center relative overflow-hidden">
-        {/* Glow backdrop */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-500/10 dark:bg-indigo-500/10 rounded-full blur-[80px] pointer-events-none"></div>
-        <div className="flex flex-col items-center gap-6 relative z-10">
-          <div className="relative w-16 h-16 flex items-center justify-center">
-            <div className="absolute inset-0 border-4 border-slate-100 dark:border-slate-800 rounded-2xl"></div>
-            <div className="absolute inset-0 border-4 border-blue-500 dark:border-indigo-500 rounded-2xl border-t-transparent dark:border-t-transparent animate-spin"></div>
-            <RelayLogo className="text-blue-600 dark:text-indigo-400 animate-pulse" size={28} />
+      <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8 w-full">
+        {/* Header Skeleton */}
+        <div className="space-y-3">
+          <Skeleton className="h-10 w-64" />
+          <Skeleton className="h-4 w-48" />
+        </div>
+
+        {/* Stats Row Skeleton */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {[1, 2, 3].map(i => (
+            <Skeleton key={i} className="h-28 w-full" />
+          ))}
+        </div>
+
+        {/* Score Summary Skeleton */}
+        <Skeleton className="h-40 w-full" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Quick Actions Skeleton */}
+          <div className="space-y-4">
+            <Skeleton className="h-6 w-32 mb-4" />
+            <div className="grid grid-cols-2 gap-3">
+              {[1, 2, 3, 4].map(i => (
+                <Skeleton key={i} className="h-24 w-full" />
+              ))}
+            </div>
           </div>
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-lg font-black text-slate-800 dark:text-white tracking-tight">Initializing Workspace</p>
-            <p className="text-xs text-slate-500 font-medium tracking-widest uppercase">Fetching data modules...</p>
+
+          {/* Activity Skeleton */}
+          <div className="space-y-4">
+            <div className="flex justify-between items-center mb-4">
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-4 w-16" />
+            </div>
+            <div className="space-y-3">
+              {[1, 2, 3].map(i => (
+                <Skeleton key={i} className="h-16 w-full" />
+              ))}
+            </div>
           </div>
         </div>
       </div>

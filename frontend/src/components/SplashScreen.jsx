@@ -27,13 +27,13 @@ function SplashScreen() {
         </motion.div>
 
         {/* Typing Text Effect */}
-        <h1 className="text-3xl md:text-4xl font-bold text-white tracking-widest mb-2 font-mono">
-          DEV<span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">NEXUS</span>
+        <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 tracking-[0.2em] mb-2 font-mono">
+          RELAY
         </h1>
         
         <div className="flex items-center gap-2 mt-4">
           <span className="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
-          <span className="text-gray-400 font-mono text-sm">Initializing Development Environment...</span>
+          <span className="text-gray-400 font-mono text-sm tracking-wider uppercase">The Workspace</span>
         </div>
 
         {/* Progress Bar */}

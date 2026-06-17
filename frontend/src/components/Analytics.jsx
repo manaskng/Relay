@@ -14,6 +14,7 @@ import {
   FiLoader,
   FiAlertTriangle,
 } from "react-icons/fi";
+import { Skeleton } from "./Skeleton";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -441,16 +442,37 @@ export default function Analytics() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-        >
-          <FiLoader className="w-8 h-8 text-purple-500" />
-        </motion.div>
-        <p className="text-sm text-slate-400 font-medium">
-          Crunching your data...
-        </p>
+      <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-6 w-full">
+        {/* Header Skeleton */}
+        <div className="space-y-2 mb-6">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+
+        {/* Relay Score Hero Skeleton */}
+        <div className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-5 md:p-6 lg:col-span-2 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+          <Skeleton className="w-40 h-40 rounded-full" />
+          <div className="grid grid-cols-2 gap-4">
+            {[1, 2, 3, 4].map(i => (
+              <Skeleton key={i} className="h-24 w-32 rounded-xl" />
+            ))}
+          </div>
+        </div>
+
+        {/* 2-column grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Activity Streak Skeleton */}
+          <div className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-5 md:p-6 lg:col-span-2 h-48">
+            <Skeleton className="h-full w-full" />
+          </div>
+
+          {/* Cards Skeletons */}
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-5 md:p-6 h-64">
+              <Skeleton className="h-full w-full" />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
