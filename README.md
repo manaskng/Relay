@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ Relay
+#  Relay
 
 ### The Collaborative Developer Workspace — Built for Engineering Teams
 
@@ -23,7 +23,7 @@
 
 ---
 
-## 📌 Why Relay Exists
+##  Why Relay Exists
 
 Modern developers switch between **7+ tools daily** — a code editor, documentation wiki, task board, snippet manager, profile tracker, and AI assistant — each in a separate tab, each with its own auth, its own data silo. **Relay collapses all of that into a single, real-time workspace.**
 
@@ -31,7 +31,7 @@ It's not just a CRUD app. It's a **production-grade, multi-service platform** wi
 
 ---
 
-## 🏆 Engineering Highlights at a Glance
+##  Engineering Highlights at a Glance
 
 | Metric | Detail |
 |:---|:---|
@@ -61,7 +61,7 @@ graph TB
         Router["React Router v7<br/>Auth Guards"]
     end
 
-    subgraph Server["⚙️ Backend — Express 5 + Node.js"]
+    subgraph Server[" Backend — Express 5 + Node.js"]
         API["REST API<br/>10 Route Modules"]
         AuthMW["JWT Auth Middleware"]
         RateLimiter["Redis Sliding-Window<br/>Rate Limiter"]
@@ -70,13 +70,13 @@ graph TB
         Compiler["Code Compiler<br/>OnlineCompiler → Piston"]
     end
 
-    subgraph Data["🗄️ Data Layer"]
+    subgraph Data[" Data Layer"]
         MongoDB["MongoDB Atlas<br/>7 Collections + Atlas Search"]
         Redis["Upstash Redis<br/>Rate Limits + Contest Cache"]
         Cloudinary["Cloudinary CDN<br/>Image Uploads"]
     end
 
-    subgraph External["🌐 External Services"]
+    subgraph External[" External Services"]
         Brevo["Brevo SMTP<br/>Transactional Email"]
         Clist["Clist API<br/>9 Contest Platforms"]
         GitHub["GitHub API<br/>Profile Stats"]
@@ -101,7 +101,7 @@ graph TB
 
 ---
 
-## 🧠 AI Knowledge Pipeline (RAG)
+##  AI Knowledge Pipeline (RAG)
 
 > Relay isn't just a wrapper around the Gemini API. It features a fully custom **Retrieval-Augmented Generation (RAG)** architecture built entirely in Node.js, allowing developers to literally "chat" with their own codebase and documentation.
 
@@ -173,7 +173,7 @@ sequenceDiagram
 
 ---
 
-## 🧠 AI & Code Execution Pipeline
+##  AI & Code Execution Pipeline
 
 Relay doesn't just call an API — it implements a **dual-model failover strategy** for both AI and compilation, ensuring the user never sees a dead-end error.
 
@@ -219,7 +219,7 @@ flowchart LR
 
 ---
 
-## 🔍 Search Architecture — Atlas Search vs Regex
+##  Search Architecture — Atlas Search vs Regex
 
 Relay implements **MongoDB Atlas Search** powered by Apache Lucene inverted indexes, with an automatic Regex fallback for environments where Atlas Search is unavailable.
 
@@ -228,8 +228,8 @@ flowchart TB
     Q["User Query: 'binary serch'<br/>(note the typo)"] --> AS{"Atlas Search<br/>Available?"}
     AS -->|Yes| Lucene["$search Aggregation Pipeline<br/>• Compound Query<br/>• Title boost: 3×<br/>• Fuzzy matching: maxEdits 2<br/>• Returns top 5 per collection"]
     AS -->|No| Regex["Regex Fallback<br/>• O(N) full scan<br/>• No typo tolerance<br/>• Case-insensitive"]
-    Lucene --> Results["✅ Matches 'Binary Search'<br/>despite the typo — <10ms"]
-    Regex --> Results2["⚠️ Matches exact patterns only<br/>~500ms on large datasets"]
+    Lucene --> Results[" Matches 'Binary Search'<br/>despite the typo — <10ms"]
+    Regex --> Results2[" Matches exact patterns only<br/>~500ms on large datasets"]
 
     style Lucene fill:#065f46,stroke:#10b981,color:#e2e8f0
     style Regex fill:#7f1d1d,stroke:#ef4444,color:#e2e8f0
@@ -238,13 +238,13 @@ flowchart TB
 | Benchmark | Atlas Search | Regex Fallback | Improvement |
 |:---|:---:|:---:|:---:|
 | **Latency** (1000 docs) | ~8ms | ~500ms | **~60× faster** |
-| **Fuzzy Matching** | ✅ Yes (Levenshtein distance ≤ 2) | ❌ No | — |
-| **Relevance Scoring** | ✅ Weighted (title 3×, content 1×) | ❌ No ranking | — |
-| **Autocomplete** | ✅ Prefix + n-gram | ❌ None | — |
+| **Fuzzy Matching** |  Yes (Levenshtein distance ≤ 2) |  No | — |
+| **Relevance Scoring** |  Weighted (title 3×, content 1×) |  No ranking | — |
+| **Autocomplete** |  Prefix + n-gram |  None | — |
 
 ---
 
-## 💎 Feature Breakdown
+##  Feature Breakdown
 
 ### 1. RelaySandBox — Real-Time Collaborative Code Editor
 - **Monaco Editor** (the same engine powering VS Code) with full IntelliSense
@@ -502,7 +502,7 @@ erDiagram
 
 ---
 
-## 🏃 Local Setup
+##  Local Setup
 
 ### Prerequisites
 - Node.js 18+
