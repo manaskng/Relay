@@ -43,6 +43,7 @@ const corsOptions = {
     "http://localhost:5173",               
     "https://my-nano-notesf.vercel.app" ,
     "https://devnexus-app.vercel.app",
+    "https://relay-workspace-llm.vercel.app"
   ],
   credentials: true
 };
